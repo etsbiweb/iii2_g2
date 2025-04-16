@@ -20,7 +20,3 @@ Napraviti web aplikaciju koja omogućava školama vođenje evidencije učenika i
 - **Administrator**: dodavanje učenika, kreiranje odjeljenja
 
 ## 😉 Upustvo za github: https://github.com/zinaid/ArcosixGitTutorial/blob/main/tutorial.md
-
-## 🔗 Kako koristiti GitHub sa Visual Studio Code-om
-1. Napravi novi repozitorij na GitHub-u
-2. U VS Code-u koristi terminal:
