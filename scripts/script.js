@@ -1,0 +1,1 @@
+alert("Ubi se majmunje mrtvi");
