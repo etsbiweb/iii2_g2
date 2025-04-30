@@ -1,6 +1,4 @@
 <?php
-    $pass = "admin123#@";
-    $hash_pass = password_hash($pass,  PASSWORD_DEFAULT);
     session_start();
     require_once("includes/dbh.php");
     if(isset($_SESSION['logged']))
@@ -29,14 +27,6 @@
         $query->bindParam(":email",$email);
         $query->execute();
         $row = $query->fetchAll(PDO::FETCH_ASSOC);
-
-        foreach($row as $result)
-        {
-            echo $result['password'];
-        }
-        exit();
-
-
 
         if(count($error_list) == 0)
         {
@@ -92,16 +82,6 @@
                         <div class="row justify-content-center">
                             <h6 style="font-family: OpenSans,sans-serif; text-align: center;">Login</h6>
                             <form action="login.php" method="post">
-                                <?php
-                                    foreach( $error_list as $error)
-                                    {
-                                        echo '
-                                            <div class="alert alert-danger mt-1" role="alert">
-                                                '.$error.'
-                                            </div>
-                                        ';
-                                    }
-                                ?>
                                 <div class="mt-3">
                                     <label for="email" class="form-label" style="font-family: Inter,sans-serif; font-size: 13px;">Email:</label>
                                     <input type="email" name="email" id="email" class="form-control" placeholder="Email" required>

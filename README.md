@@ -20,3 +20,6 @@ Napraviti web aplikaciju koja omogućava školama vođenje evidencije učenika i
 - **Administrator**: dodavanje učenika, kreiranje odjeljenja
 
 ## 😉 Upustvo za github: https://github.com/zinaid/ArcosixGitTutorial/blob/main/tutorial.md
+
+## ✅ Uradjeno
+1. Login System -> password za admina: admin123;
