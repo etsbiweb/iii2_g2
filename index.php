@@ -18,6 +18,6 @@
     <title>Dashboard</title>
 </head>
 <body>
-    <h2 class="text-align-center">Dashboard</h2>
+  <h2 class="text-align-center">Dashboard</h2>
 </body>
 </html>

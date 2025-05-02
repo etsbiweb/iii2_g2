@@ -52,7 +52,7 @@
             }
             else
             {
-                header("Location: index.php?message=empty_row");
+                header("Location: index.php?message=no_account");
                 exit();
             }
         }
@@ -65,40 +65,48 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
     <title>Login</title>
 </head>
+
 <body>
-    <main class="main">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-12 col-sm-8 col-md-6 col-lg-4">
-                    <div class="login-box">
-                        <div class="row justify-content-center">
-                            <h6 style="font-family: OpenSans,sans-serif; text-align: center;">Login</h6>
-                            <form action="login.php" method="post">
-                                <div class="mt-3">
-                                    <label for="email" class="form-label" style="font-family: Inter,sans-serif; font-size: 13px;">Email:</label>
-                                    <input type="email" name="email" id="email" class="form-control" placeholder="Email" required>
-                                </div>
-                                <div class="mt-1">
-                                    <label for="password" class="form-label" style="margin-top: 20px; font-family: Inter,sans-serif; font-size: 13px;">Password:</label>
-                                    <input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
-                                </div>
-                                <div class="mt-3 d-flex justify-content-center align-content-center">
-                                    <button type="submit" class="btn btn-primary" name="submit" style="margin-top: 20px; font-family: Inter,sans-serif;">Login</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+
+    <div class="container" id="container">
+        <div class="form-container sign-in">
+            <form action="login.php" method="post">
+                <a href="https://etsbi.edu.ba/" class="icon" target="_blank">
+                    <img src="imgs/dwa.png" alt="ETSBI" class="custom-icon">
+                </a>
+                <h1>Sign In</h1>
+                <div class="social-icons">
+                    <a href="https://etsbi.edu.ba/" class="icon" target="_blank"><i class="fa-solid fa-graduation-cap"></i></a>
+                    <a href="https://www.facebook.com/etsbi.bihac/?locale=hr_HR" class="icon" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/etsbi_/" class="icon" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+                <span>or use your email password</span>
+                <input type="email" name="email" id="email" placeholder="Email">
+                <input type="password" name="password" id="password" placeholder="Password">
+                <a href="#">Forget Your Password?</a>
+                <button type="submit" name="submit" id="submit">Sign In</button>
+            </form>
+        </div>
+    
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>Signup with your personal details to use all of site features</p>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
+
+    <!--<script src="scripts/script.js"></script>-->
 </body>
+
 </html>
