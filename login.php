@@ -91,7 +91,7 @@
                 <span>or use your email password</span>
                 <input type="email" name="email" id="email" placeholder="Email">
                 <input type="password" name="password" id="password" placeholder="Password">
-                <a href="#">Forget Your Password?</a>
+                <a href="forgot-password.php">Forgot Your Password?</a>
                 <button type="submit" name="submit" id="submit">Sign In</button>
             </form>
         </div>
@@ -100,7 +100,7 @@
             <div class="toggle">
                 <div class="toggle-panel toggle-right">
                     <h1>Hello, Friend!</h1>
-                    <p>Signup with your personal details to use all of site features</p>
+                    <p>SignIn with your personal details to use all of site features</p>
                 </div>
             </div>
         </div>
