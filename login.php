@@ -37,8 +37,15 @@
                     if(password_verify($password, $result["password"]))
                     {
                         $_SESSION['logged'] = 'yes';
-                        $_SESSION['id'] = $result['id'];
-                        header("Location: index.php?message=logged_successfully");
+                        $_SESSION['id'] = $result['user_id'];
+                        
+                        $roleFetch = $conn->prepare("SELECT pristup FROM users WHERE email = :email LIMIT 1");
+                        $roleFetch->bindParam(":email", $email);
+                        $roleFetch->execute();
+                        $role = $roleFetch->fetchColumn();
+                        header("Location: $role/dashboard.php");
+                                                 
+                        //header("Location: index.php?message=logged_successfully");
                         exit();
                     }
                     else
