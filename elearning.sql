@@ -135,7 +135,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `email`, `password`, `datum_registracije`, `pristup`) VALUES
-(3, 'sender.americanfood@gmail.com', '$2y$10$3.eUmge44edb/0rKL/SKfOoR6cDJ9KuIxOw.XgNiwkjpXfxNVfT66', NULL, 'admin');
+(1, 'sender.americanfood@gmail.com', '$2y$10$3.eUmge44edb/0rKL/SKfOoR6cDJ9KuIxOw.XgNiwkjpXfxNVfT66', NULL, 'admin');
 
 --
 -- Indexes for dumped tables
