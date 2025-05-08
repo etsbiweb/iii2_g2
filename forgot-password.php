@@ -27,7 +27,7 @@
             $createTokenQuery->execute();
 
             $userMessage = 'This is a message from elearning team, you requested a password reset
-            http://localhost/iii2_g2/reset_password.php?token='.$token.' expires in 10 minutes
+            http://localhost/iii2_g2/reset_password.php?token='.$token.' expires in 1 hour.
             ';
 
             $userMessage = trim($userMessage);

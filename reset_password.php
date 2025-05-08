@@ -1,22 +1,31 @@
 <?php
 require_once("includes/dbh.php");
-$token = $_GET["token"];
-
-if(empty($token)){
-    header("Location: login.php");
-    exit();
-}
-$tokenQuery = $conn->prepare("SELECT * FROM `password_resets` WHERE `token` = :token AND `created_at` > NOW() - INTERVAL 10 HOURS");
-$tokenQuery->bindValue(":token", $token);
-$tokenQuery->execute();
-
-$row = $tokenQuery->fetch(PDO::FETCH_ASSOC);
-if(!$row){
-    header("Location: login.php?message=expired_token");
-    exit();
-}
 
 if(isset($_POST['submit'])){
+    $token = $_GET["token"];
+
+    var_dump($token);
+    var_dump($_GET['token']);
+
+    exit();
+
+    if(empty($token)){
+        header("Location: login.php?message=token_empty");
+        exit();
+    }
+
+
+    $tokenQuery = $conn->prepare("SELECT * FROM `password_resets` WHERE `token` = :token AND `created_at` > NOW() - INTERVAL 10 HOUR");
+    $tokenQuery->bindValue(":token", $token);
+    $tokenQuery->execute();
+
+    $row = $tokenQuery->fetch(PDO::FETCH_ASSOC);
+    
+    if(!$row){
+        header("Location: login.php?message=expired_token");
+        exit();
+    }
+
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
 
@@ -31,8 +40,8 @@ if(isset($_POST['submit'])){
     }
 
     $hash = password_hash($password, PASSWORD_DEFAULT);
-    $updateQuery = $conn->prepare('UPDATE `users` SET `password` = :password WHERE `email` = :email');
-    $updateQuery->bindValue(':password', $hash);
+    $updateQuery = $conn->prepare('UPDATE `users` SET `password` = :sifra WHERE `email` = :email');
+    $updateQuery->bindValue(':sifra', $hash);
     $updateQuery->bindValue(':email', $row['email']);
     $updateQuery->execute();
 
@@ -51,12 +60,12 @@ if(isset($_POST['submit'])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>forgot-password</title>
+    <title>new-password</title>
 </head>
 <body>
     <div class="container" id="container">
         <div class="form-container sign-in">
-            <form action="forgot-password.php" method="post">
+            <form action="reset_password.php" method="post">
                 <a href="https://etsbi.edu.ba/" class="icon" target="_blank">
                     <img src="imgs/dwa.png" alt="ETSBI" class="custom-icon">
                 </a>
@@ -67,8 +76,8 @@ if(isset($_POST['submit'])){
                     <a href="https://www.instagram.com/etsbi_/" class="icon" target="_blank"><i class="fa-brands fa-instagram"></i></a>
                 </div>
                 <span>Enter your new password</span>
-                <input type="text" name="password" id="password" placeholder="Password">
-                <input type="text" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
+                <input type="password" name="password" id="password" placeholder="Password">
+                <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
                 <button type="submit" name="submit" id="submit">Submit</button>
             </form>
         </div>
