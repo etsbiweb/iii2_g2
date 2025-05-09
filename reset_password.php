@@ -1,13 +1,10 @@
 <?php
 require_once("includes/dbh.php");
+$token = $_REQUEST['token'];
+echo $token;
 
 if(isset($_POST['submit'])){
-    $token = $_GET["token"];
-
-    var_dump($token);
-    var_dump($_GET['token']);
-
-    exit();
+    
 
     if(empty($token)){
         header("Location: login.php?message=token_empty");
@@ -45,7 +42,7 @@ if(isset($_POST['submit'])){
     $updateQuery->bindValue(':email', $row['email']);
     $updateQuery->execute();
 
-    $deleteQuery = $conn->prepare("DELETE FROM `password_resets` WHERE `token` = :token");
+    $deleteQuery = $conn->prepare("DELETE FROM`password_resets` WHERE `token` = :token");
     $deleteQuery->bindValue(":token",$token);
     $deleteQuery->execute();
 
@@ -78,6 +75,7 @@ if(isset($_POST['submit'])){
                 <span>Enter your new password</span>
                 <input type="password" name="password" id="password" placeholder="Password">
                 <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
+                <input type="hidden" name="token" value="<?php echo htmlspecialchars($token); ?>">
                 <button type="submit" name="submit" id="submit">Submit</button>
             </form>
         </div>
