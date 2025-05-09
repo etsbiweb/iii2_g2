@@ -4,13 +4,10 @@ $token = $_REQUEST['token'];
 echo $token;
 
 if(isset($_POST['submit'])){
-    
-
     if(empty($token)){
         header("Location: login.php?message=token_empty");
         exit();
     }
-
 
     $tokenQuery = $conn->prepare("SELECT * FROM `password_resets` WHERE `token` = :token AND `created_at` > NOW() - INTERVAL 10 HOUR");
     $tokenQuery->bindValue(":token", $token);

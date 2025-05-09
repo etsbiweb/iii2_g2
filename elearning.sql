@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 06, 2025 at 11:52 AM
+-- Generation Time: May 09, 2025 at 09:18 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -49,6 +49,19 @@ CREATE TABLE `izostanci` (
   `ucenik_id` int(11) DEFAULT NULL,
   `status_izostanka` enum('Opravdan','Neopravdan') DEFAULT NULL,
   `vrijeme` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `password_resets`
+--
+
+CREATE TABLE `password_resets` (
+  `reset_id` int(11) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `token` varchar(100) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -135,7 +148,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `email`, `password`, `datum_registracije`, `pristup`) VALUES
-(1, 'sender.americanfood@gmail.com', '$2y$10$3.eUmge44edb/0rKL/SKfOoR6cDJ9KuIxOw.XgNiwkjpXfxNVfT66', NULL, 'admin');
+(1, 'sender.americanfood@gmail.com', '$2y$10$8rLO1MaB223P5IbyloaA4eM9ZA6v0SZWZFVvOzuvEOZlXAfSjDF82', NULL, 'admin');
 
 --
 -- Indexes for dumped tables
@@ -157,6 +170,12 @@ ALTER TABLE `izostanci`
   ADD PRIMARY KEY (`izostanak_id`),
   ADD KEY `cas_id` (`cas_id`),
   ADD KEY `ucenik_id` (`ucenik_id`);
+
+--
+-- Indexes for table `password_resets`
+--
+ALTER TABLE `password_resets`
+  ADD PRIMARY KEY (`reset_id`);
 
 --
 -- Indexes for table `predmet`
@@ -213,6 +232,12 @@ ALTER TABLE `cas`
 --
 ALTER TABLE `izostanci`
   MODIFY `izostanak_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `password_resets`
+--
+ALTER TABLE `password_resets`
+  MODIFY `reset_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `predmet`
