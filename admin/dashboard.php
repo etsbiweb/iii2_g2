@@ -1,3 +1,18 @@
+<?php
+require_once("../includes/dbh.php");
+$qUcenici = $conn->prepare("SELECT count(*) FROM ucenici;");
+$qUcenici->execute();
+$ucenici = $qUcenici->fetchColumn();
+
+$qProfesori = $conn->prepare("SELECT count(*) FROM profesor;");
+$qProfesori->execute();
+$profesori = $qProfesori->fetchColumn();
+
+$qIzostanci = $conn->prepare("SELECT count(*) FROM izostanci WHERE DATE(vrijeme) = CURDATE()");
+$qIzostanci->execute();
+$izostanci = $qIzostanci->fetchColumn();
+?>
+
 <!DOCTYPE html>
 <html lang="sr">
 <head>
@@ -16,7 +31,7 @@
     <!-- Sidebar -->
     <nav class="col-md-2 sidebar">
       <h5 class="px-3 fs-3 my-3">Admin panel</h5>
-      <a href="#" class="active"><i class="bi bi-house me-2"></i>Početna</a>
+      <a href="dashboard.php" class="active"><i class="bi bi-house me-2"></i>Početna</a>
       <a href="#"><i class="bi bi-person me-2"></i>Učenici</a>
       <a href="#"><i class="bi bi-person-badge me-2"></i>Profesori</a>
       <a href="#"><i class="bi bi-grid-3x3-gap me-2"></i>Razredi</a>
@@ -34,21 +49,21 @@
           <div class="card text-center p-3">
             <i class="bi bi-mortarboard card-icon mb-2"></i>
             <h6>Učenici</h6>
-            <h3>450</h3>
+            <h3><?php echo $ucenici; ?></h3>
           </div>
         </div>
         <div class="col-md-4">
           <div class="card text-center p-3">
             <i class="bi bi-person-circle card-icon mb-2"></i>
             <h6>Profesori</h6>
-            <h3>35</h3>
+            <h3><?php echo $profesori; ?></h3>
           </div>
         </div>
         <div class="col-md-4">
           <div class="card text-center p-3">
             <i class="bi bi-exclamation-triangle card-icon mb-2"></i>
             <h6>Izostanci danas</h6>
-            <h3>12</h3>
+            <h3><?php echo $izostanci; ?></h3>
           </div>
         </div>
       </div>

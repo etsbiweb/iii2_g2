@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 09, 2025 at 09:18 AM
+-- Generation Time: May 10, 2025 at 11:35 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -110,6 +110,31 @@ CREATE TABLE `razred` (
   `godina` enum('I','II','III','IV') DEFAULT NULL,
   `odjeljene` enum('1','2','3','4','5') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `razred`
+--
+
+INSERT INTO `razred` (`razred_id`, `godina`, `odjeljene`) VALUES
+(1, 'I', '1'),
+(2, 'I', '2'),
+(3, 'I', '3'),
+(4, 'I', '4'),
+(5, 'I', '5'),
+(6, 'II', '1'),
+(7, 'II', '2'),
+(8, 'II', '3'),
+(9, 'II', '4'),
+(10, 'II', '5'),
+(11, 'III', '1'),
+(12, 'III', '2'),
+(13, 'III', '3'),
+(14, 'III', '4'),
+(15, 'III', '5'),
+(16, 'IV', '1'),
+(17, 'IV', '2'),
+(18, 'IV', '3'),
+(19, 'IV', '4');
 
 -- --------------------------------------------------------
 
@@ -255,7 +280,7 @@ ALTER TABLE `profesor`
 -- AUTO_INCREMENT for table `razred`
 --
 ALTER TABLE `razred`
-  MODIFY `razred_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `razred_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `ucenici`

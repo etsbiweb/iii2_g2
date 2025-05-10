@@ -5,6 +5,15 @@
         header("Location: login.php?message=logintoaccess");
         exit();
     }
+
+    if(isset($_SESSION["logged"]))
+    {
+        $qRole = $conn->prepare("SELECT pristup FROM users WHERE user_id = :id");
+        $qRole->bindParam(':id', $_SESSION['id']);
+        $qRole->execute();
+        $role= $qRole->fetchColumn();
+        header("Location: $role/dashboard.php");
+    }
 ?>
 
 <!DOCTYPE html>
