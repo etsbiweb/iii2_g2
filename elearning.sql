@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 10, 2025 at 11:35 AM
+-- Generation Time: May 10, 2025 at 12:46 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -50,6 +50,13 @@ CREATE TABLE `izostanci` (
   `status_izostanka` enum('Opravdan','Neopravdan') DEFAULT NULL,
   `vrijeme` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `izostanci`
+--
+
+INSERT INTO `izostanci` (`izostanak_id`, `cas_id`, `ucenik_id`, `status_izostanka`, `vrijeme`) VALUES
+(1, NULL, 1, 'Opravdan', '2025-05-10 10:07:57');
 
 -- --------------------------------------------------------
 
@@ -154,6 +161,13 @@ CREATE TABLE `ucenici` (
   `neopravdani` smallint(6) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `ucenici`
+--
+
+INSERT INTO `ucenici` (`ucenik_id`, `user_id`, `ime_prezime`, `jmbg`, `razred_id`, `roditelj_telefon`, `online_status`, `opravdani`, `neopravdani`) VALUES
+(1, 2, 'Teo Svilenski', 123123, 1, '+387 60 300 6574', NULL, 1, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -173,7 +187,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `email`, `password`, `datum_registracije`, `pristup`) VALUES
-(1, 'sender.americanfood@gmail.com', '$2y$10$8rLO1MaB223P5IbyloaA4eM9ZA6v0SZWZFVvOzuvEOZlXAfSjDF82', NULL, 'admin');
+(1, 'sender.americanfood@gmail.com', '$2y$10$12TN0MSZK/yWhDf.sbXl/urTI0ZqctPLGhJpC6P4MBUwhgtxPOiZe', NULL, 'admin'),
+(2, 'mikajlo367@gmail.com', '$2y$10$Vm1xvPKFBD/fNiHueEH8sOFxX9geYKFN/IzedM/N/RfdXf.frZAFe', NULL, 'ucenik');
 
 --
 -- Indexes for dumped tables
@@ -256,13 +271,13 @@ ALTER TABLE `cas`
 -- AUTO_INCREMENT for table `izostanci`
 --
 ALTER TABLE `izostanci`
-  MODIFY `izostanak_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `izostanak_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `password_resets`
 --
 ALTER TABLE `password_resets`
-  MODIFY `reset_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `reset_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `predmet`
@@ -274,7 +289,7 @@ ALTER TABLE `predmet`
 -- AUTO_INCREMENT for table `profesor`
 --
 ALTER TABLE `profesor`
-  MODIFY `profesor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `profesor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `razred`
@@ -286,7 +301,7 @@ ALTER TABLE `razred`
 -- AUTO_INCREMENT for table `ucenici`
 --
 ALTER TABLE `ucenici`
-  MODIFY `ucenik_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ucenik_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
