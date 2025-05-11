@@ -36,14 +36,14 @@ $izostanci = $qIzostanci->fetchColumn();
       <a href="#"><i class="bi bi-person me-2"></i>Učenici</a>
       <a href="#"><i class="bi bi-person-badge me-2"></i>Profesori</a>
       <div class="dropdown-container">
-                <a href="#"><i class="bi bi-grid-3x3-gap me-2"></i>Razredi</a>
-                <div class="dropdown-menu">
-                    <a href="prikaziucenike.php">I</a>
-                    <a href="#">II</a>
-                    <a href="#">III</a>
-                    <a href="#">IV</a>
-                </div>
-            </div>
+        <a href="#"><i class="bi bi-grid-3x3-gap me-2"></i>Razredi</a>
+        <div class="dropdown-menu">
+          <a href="prikaziucenike.php">I</a>
+          <a href="#">II</a>
+          <a href="#">III</a>
+          <a href="#">IV</a>
+        </div>
+      </div>
       <a href="#"><i class="bi bi-book me-2"></i>Predmeti</a>
       <a href="#"><i class="bi bi-calendar-week me-2"></i>Raspored časova</a>
       <a href="#"><i class="bi bi-bar-chart me-2"></i>Izostanci</a>
@@ -80,12 +80,26 @@ $izostanci = $qIzostanci->fetchColumn();
       <div class="row g-3">
         <div class="col-md-6">
           <div class="card p-3">
-            <h5 class="mb-3">Nedavne aktivnosti</h5>
+            <h5 class="mb-3">Nedavne aktivnosti:</h5>
             <ul class="mb-0">
-              <li>Dodano 5 učenika u razred II–1</li>
-              <li>Izmenjen raspored za razred III–2</li>
-              <li>Dodat profesor Matija Perić</li>
-              <li>Uklonjena učenica Ana Jurić</li>
+              <?php
+                $queryLog = $conn->prepare("SELECT * FROM `log` ORDER BY `log_id` DESC");
+                $queryLog->execute();
+                $logs = $queryLog->fetchAll(PDO::FETCH_ASSOC);
+
+                if(!empty($logs))
+                {                
+                  foreach($logs as $log)
+                  {
+                      echo '
+                        <li>'.$log['log_text'].'</li>
+                      ';
+                  }
+                }
+                else{
+                  echo 'Nema aktivnosti';
+                }
+              ?>
             </ul>
           </div>
         </div>

@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: May 10, 2025 at 12:46 PM
+-- Host: localhost
+-- Generation Time: May 11, 2025 at 09:33 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -57,6 +57,18 @@ CREATE TABLE `izostanci` (
 
 INSERT INTO `izostanci` (`izostanak_id`, `cas_id`, `ucenik_id`, `status_izostanka`, `vrijeme`) VALUES
 (1, NULL, 1, 'Opravdan', '2025-05-10 10:07:57');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `log`
+--
+
+CREATE TABLE `log` (
+  `log_id` int(11) NOT NULL,
+  `log_text` varchar(100) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -155,8 +167,6 @@ CREATE TABLE `ucenici` (
   `ime_prezime` varchar(100) DEFAULT NULL,
   `jmbg` int(40) DEFAULT NULL,
   `razred_id` int(11) DEFAULT NULL,
-  `roditelj_telefon` varchar(30) DEFAULT NULL,
-  `online_status` tinyint(1) DEFAULT NULL,
   `opravdani` smallint(6) DEFAULT NULL,
   `neopravdani` smallint(6) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -165,8 +175,8 @@ CREATE TABLE `ucenici` (
 -- Dumping data for table `ucenici`
 --
 
-INSERT INTO `ucenici` (`ucenik_id`, `user_id`, `ime_prezime`, `jmbg`, `razred_id`, `roditelj_telefon`, `online_status`, `opravdani`, `neopravdani`) VALUES
-(1, 2, 'Teo Svilenski', 123123, 1, '+387 60 300 6574', NULL, 1, 1);
+INSERT INTO `ucenici` (`ucenik_id`, `user_id`, `ime_prezime`, `jmbg`, `razred_id`, `opravdani`, `neopravdani`) VALUES
+(1, 2, 'Teo Svilenski', 123123, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -178,17 +188,17 @@ CREATE TABLE `users` (
   `user_id` int(11) NOT NULL,
   `email` varchar(100) DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL,
-  `datum_registracije` date DEFAULT NULL,
-  `pristup` enum('ucenik','admin','profesor') DEFAULT NULL
+  `pristup` enum('ucenik','admin','profesor') DEFAULT NULL,
+  `token` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `email`, `password`, `datum_registracije`, `pristup`) VALUES
-(1, 'sender.americanfood@gmail.com', '$2y$10$12TN0MSZK/yWhDf.sbXl/urTI0ZqctPLGhJpC6P4MBUwhgtxPOiZe', NULL, 'admin'),
-(2, 'mikajlo367@gmail.com', '$2y$10$Vm1xvPKFBD/fNiHueEH8sOFxX9geYKFN/IzedM/N/RfdXf.frZAFe', NULL, 'ucenik');
+INSERT INTO `users` (`user_id`, `email`, `password`, `pristup`, `token`) VALUES
+(1, 'sender.americanfood@gmail.com', '$2y$10$12TN0MSZK/yWhDf.sbXl/urTI0ZqctPLGhJpC6P4MBUwhgtxPOiZe', 'admin', NULL),
+(2, 'mikajlo367@gmail.com', '$2y$10$Vm1xvPKFBD/fNiHueEH8sOFxX9geYKFN/IzedM/N/RfdXf.frZAFe', 'ucenik', NULL);
 
 --
 -- Indexes for dumped tables
@@ -210,6 +220,12 @@ ALTER TABLE `izostanci`
   ADD PRIMARY KEY (`izostanak_id`),
   ADD KEY `cas_id` (`cas_id`),
   ADD KEY `ucenik_id` (`ucenik_id`);
+
+--
+-- Indexes for table `log`
+--
+ALTER TABLE `log`
+  ADD PRIMARY KEY (`log_id`);
 
 --
 -- Indexes for table `password_resets`
@@ -272,6 +288,12 @@ ALTER TABLE `cas`
 --
 ALTER TABLE `izostanci`
   MODIFY `izostanak_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `log`
+--
+ALTER TABLE `log`
+  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `password_resets`
