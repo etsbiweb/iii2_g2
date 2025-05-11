@@ -17,12 +17,12 @@
             <a href="#"><i class="bi bi-person me-2"></i>Učenici</a>
             <a href="#"><i class="bi bi-person-badge me-2"></i>Profesori</a>
             <div class="dropdown-container">
-                <a href="razredi.php" class="active"><i class="bi bi-grid-3x3-gap me-2"></i>Razredi</a>
+                <a href="#" class="active"><i class="bi bi-grid-3x3-gap me-2"></i>Razredi</a>
                 <div class="dropdown-menu">
-                    <a href="#">I</a>
-                    <a href="#">II</a>
-                    <a href="#">III</a>
-                    <a href="#">IV</a>
+                    <a href="prikaziucenike.php?r=I">I</a>
+                    <a href="prikaziucenike.php?r=II">II</a>
+                    <a href="prikaziucenike.php?r=III">III</a>
+                    <a href="prikaziucenike.php?r=IV">IV</a>
                 </div>
             </div>
             <a href="#"><i class="bi bi-book me-2"></i>Predmeti</a>
@@ -31,29 +31,66 @@
             <a href="../logout.php"><i class="bi bi-person me-2"></i>Log out</a>
         </nav>
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div class="ucenici-grid">
+            <div class="ucenici-grid mt-3">
                 <?php
-                $ucenici = [
-                    ['ime' => 'Petar', 'prezime' => 'Petrović'],
-                    ['ime' => 'Ana', 'prezime' => 'Anić'],
-                    ['ime' => 'Marko', 'prezime' => 'Marković'],
-                    ['ime' => 'Ivana', 'prezime' => 'Ivanić'],
-                    ['ime' => 'Luka', 'prezime' => 'Lukić'],
-                    ['ime' => 'Mia', 'prezime' => 'Mijić'],
-                    ['ime' => 'Filip', 'prezime' => 'Filipović'],
-                    ['ime' => 'Ema', 'prezime' => 'Emić'],
-                    ['ime' => 'Jakov', 'prezime' => 'Jakovljević'],
-                ];
+                    error_reporting(E_ALL);
+                    ini_set('display_errors', 1);
+                    ini_set('display_startup_errors', 1);
 
-                foreach ($ucenici as $ucenik) {
-                    echo '<div class="kartica-ucenik">';
-                    echo '<div class="ime-prezime-ucenik">' . $ucenik['ime'] . ' ' . $ucenik['prezime'] . '</div>';
-                    echo '<div class="gumbi-ucenik">';
-                    echo '<button class="gumb-izbrisi-ucenik">Izbriši</button>';
-                    echo '<button class="gumb-uredi-ucenik">Uredi</button>';
-                    echo '</div>';
-                    echo '</div>';
-                }
+                    require_once("../includes/dbh.php");
+                    
+                    $godina = $_REQUEST['r'];
+                    $ucenikQuery = $conn->prepare("SELECT * FROM `ucenici` ORDER BY `razred_id`");
+                    $ucenikQuery->execute();
+                    $ucenici = $ucenikQuery->fetchAll(PDO::FETCH_ASSOC);
+                    
+                    if(!empty($ucenici)){
+                        foreach($ucenici as $ucenik){
+                            $querySelect = $conn->prepare("SELECT CONCAT(`godina`,' ',`odjeljene`) AS `raz` FROM `razred` WHERE `razred_id` = :id");
+                            $querySelect->bindParam(":id",$ucenik['razred_id']);
+                            $querySelect->execute();
+                            $razred = $querySelect->fetch(PDO::FETCH_ASSOC);                            
+                
+                            echo '
+                                <div class="kartica-ucenik">
+                                    <div class="ime-prezime-ucenik">
+                                        '.$ucenik['ime_prezime'].'<br>
+                                        '.$razred['raz'].' <br>
+                                        '.$ucenik['opravdani'].' <br>
+                                        '.$ucenik['neopravdani'].' <br>
+                                    </div>
+                                    <div class="gumbi-ucenik">
+                                        <a class="gumb-izbrisi-ucenik" style="text-decoration: none;" href="obrisiucenika.php?id='.$ucenik['ucenik_id'].'">Izbriši</a>
+                                        <a class="gumb-uredi-ucenik" style="text-decoration: none;" href="editucenik.php?id='.$ucenik['ucenik_id'].'">Uredi</a>
+                                    </div>
+                                </div>
+                            ';       
+                        }
+                    }
+
+                    /*
+                    $ucenici = [
+                        ['ime' => 'Petar', 'prezime' => 'Petrović'],
+                        ['ime' => 'Ana', 'prezime' => 'Anić'],
+                        ['ime' => 'Marko', 'prezime' => 'Marković'],
+                        ['ime' => 'Ivana', 'prezime' => 'Ivanić'],
+                        ['ime' => 'Luka', 'prezime' => 'Lukić'],
+                        ['ime' => 'Mia', 'prezime' => 'Mijić'],
+                        ['ime' => 'Filip', 'prezime' => 'Filipović'],
+                        ['ime' => 'Ema', 'prezime' => 'Emić'],
+                        ['ime' => 'Jakov', 'prezime' => 'Jakovljević'],
+                    ];
+
+                    foreach ($ucenici as $ucenik) {
+                        echo '<div class="kartica-ucenik">';
+                        echo '<div class="ime-prezime-ucenik">' . $ucenik['ime'] . ' ' . $ucenik['prezime'] . '</div>';
+                        echo '<div class="gumbi-ucenik">';
+                        echo '<button class="gumb-izbrisi-ucenik">Izbriši</button>';
+                        echo '<button class="gumb-uredi-ucenik">Uredi</button>';
+                        echo '</div>';
+                        echo '</div>';
+                    }
+                    */
                 ?>
             </div>
         </main>

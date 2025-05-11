@@ -38,10 +38,10 @@ $izostanci = $qIzostanci->fetchColumn();
       <div class="dropdown-container">
         <a href="#"><i class="bi bi-grid-3x3-gap me-2"></i>Razredi</a>
         <div class="dropdown-menu">
-          <a href="prikaziucenike.php">I</a>
-          <a href="#">II</a>
-          <a href="#">III</a>
-          <a href="#">IV</a>
+          <a href="prikaziucenike.php?r=I">I</a>
+          <a href="prikaziucenike.php?r=II">II</a>
+          <a href="prikaziucenike.php?r=III">III</a>
+          <a href="prikaziucenike.php?r=IV">IV</a>
         </div>
       </div>
       <a href="#"><i class="bi bi-book me-2"></i>Predmeti</a>
