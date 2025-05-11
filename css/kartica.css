@@ -72,7 +72,7 @@ body {
 }
 
 .kartica-ucenik {
-    background-color: #f8f9fa;
+    background-color: #ebebeb;
     border: 1px solid #dee2e6;
     border-radius: 0.2rem;
     padding: 15px;
@@ -96,31 +96,43 @@ body {
 }
 
 .gumb-izbrisi-ucenik {
-    background-color: #dc3545;
+    background-color: rgb(153, 5, 5);
     color: white;
     border: none;
     border-radius: 0.2rem;
     padding: 8px 12px;
     cursor: pointer;
     font-size: 0.8rem;
+    transition: 0.25s ease all;
 }
 
 .gumb-uredi-ucenik {
-    background-color: #007bff;
+    background-color: #0062ca;
     color: white;
     border: none;
     border-radius: 0.2rem;
     padding: 8px 12px;
     cursor: pointer;
     font-size: 0.8rem;
+    transition: 0.25s ease all;
 }
 
 .gumb-izbrisi-ucenik:hover {
-    background-color: #c82333;
+    background-color: #701b23;
 }
 
 .gumb-uredi-ucenik:hover {
-    background-color: #0056b3;
+    background-color: #044e9e;
+}
+
+
+
+
+.dodaj-ucenika{
+    font-size: 6rem;
+    background-color: rgb(226, 253, 226);
+    color: rgb(0, 94, 0);
+    text-decoration: none;
 }
 
 @media (max-width: 992px) {

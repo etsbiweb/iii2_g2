@@ -1,3 +1,8 @@
+<?php
+require_once("../includes/dbh.php");
+require_once("../includes/razredi.php");
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,25 +10,36 @@
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> 
+    <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="stylesheet" href="../css/kartica.css">
 </head>
 <body>
 <body>
 <div class="container-fluid">
     <div class="row">
-        <nav class="col-md-2 sidebar">
+    <nav class="col-md-2 sidebar">
             <h5 class="px-3 fs-3 my-3">Admin panel</h5>
             <a href="dashboard.php"><i class="bi bi-house me-2"></i>Početna</a>
-            <a href="#"><i class="bi bi-person me-2"></i>Učenici</a>
             <a href="#"><i class="bi bi-person-badge me-2"></i>Profesori</a>
             <div class="dropdown-container">
                 <a href="#" class="active"><i class="bi bi-grid-3x3-gap me-2"></i>Razredi</a>
-                <div class="dropdown-menu">
-                    <a href="prikaziucenike.php?r=I">I</a>
-                    <a href="prikaziucenike.php?r=II">II</a>
-                    <a href="prikaziucenike.php?r=III">III</a>
-                    <a href="prikaziucenike.php?r=IV">IV</a>
-                </div>
+                <ul class="dropdown-menu">
+                    <?php foreach ($razredi as $razred): ?>
+                        <li class="has-submenu">
+                            <a href="#"><?php echo $razred['godina']; ?></a>
+                            <ul class="dropdown-submenu">
+                                <?php $odjeljenja = dohvatiOdjeljenja($conn, $razred); ?>
+                                <?php if (!empty($odjeljenja)): ?>
+                                    <?php foreach ($odjeljenja as $odjeljenje): ?>
+                                        <li><a href="prikaziucenike.php?id=<?php echo $odjeljenje['razred_id'];?>"><?php echo $odjeljenje['godina']; echo $odjeljenje['odjeljene']; ?></a></li>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <li><a href="#">Nema odjeljenja</a></li>
+                                <?php endif; ?>
+                            </ul>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
             </div>
             <a href="#"><i class="bi bi-book me-2"></i>Predmeti</a>
             <a href="#"><i class="bi bi-calendar-week me-2"></i>Raspored časova</a>
@@ -36,28 +52,22 @@
                     error_reporting(E_ALL);
                     ini_set('display_errors', 1);
                     ini_set('display_startup_errors', 1);
-
-                    require_once("../includes/dbh.php");
                     
-                    $godina = $_REQUEST['r'];
-                    $ucenikQuery = $conn->prepare("SELECT * FROM `ucenici` ORDER BY `razred_id`");
+                    $id = $_REQUEST['id'];
+                    $ucenikQuery = $conn->prepare("SELECT * FROM `ucenici` WHERE razred_id = :razred_id");
+                    $ucenikQuery->bindParam(":razred_id", $id);
                     $ucenikQuery->execute();
                     $ucenici = $ucenikQuery->fetchAll(PDO::FETCH_ASSOC);
                     
                     if(!empty($ucenici)){
-                        foreach($ucenici as $ucenik){
-                            $querySelect = $conn->prepare("SELECT CONCAT(`godina`,' ',`odjeljene`) AS `raz` FROM `razred` WHERE `razred_id` = :id");
-                            $querySelect->bindParam(":id",$ucenik['razred_id']);
-                            $querySelect->execute();
-                            $razred = $querySelect->fetch(PDO::FETCH_ASSOC);                            
-                
+                        foreach($ucenici as $ucenik)
+                        {
                             echo '
                                 <div class="kartica-ucenik">
                                     <div class="ime-prezime-ucenik">
                                         '.$ucenik['ime_prezime'].'<br>
-                                        '.$razred['raz'].' <br>
-                                        '.$ucenik['opravdani'].' <br>
-                                        '.$ucenik['neopravdani'].' <br>
+                                        Opravdani: '.$ucenik['opravdani'].' <br>
+                                        Neopravdani: '.$ucenik['neopravdani'].' <br>
                                     </div>
                                     <div class="gumbi-ucenik">
                                         <a class="gumb-izbrisi-ucenik" style="text-decoration: none;" href="obrisiucenika.php?id='.$ucenik['ucenik_id'].'">Izbriši</a>
@@ -67,31 +77,10 @@
                             ';       
                         }
                     }
-
-                    /*
-                    $ucenici = [
-                        ['ime' => 'Petar', 'prezime' => 'Petrović'],
-                        ['ime' => 'Ana', 'prezime' => 'Anić'],
-                        ['ime' => 'Marko', 'prezime' => 'Marković'],
-                        ['ime' => 'Ivana', 'prezime' => 'Ivanić'],
-                        ['ime' => 'Luka', 'prezime' => 'Lukić'],
-                        ['ime' => 'Mia', 'prezime' => 'Mijić'],
-                        ['ime' => 'Filip', 'prezime' => 'Filipović'],
-                        ['ime' => 'Ema', 'prezime' => 'Emić'],
-                        ['ime' => 'Jakov', 'prezime' => 'Jakovljević'],
-                    ];
-
-                    foreach ($ucenici as $ucenik) {
-                        echo '<div class="kartica-ucenik">';
-                        echo '<div class="ime-prezime-ucenik">' . $ucenik['ime'] . ' ' . $ucenik['prezime'] . '</div>';
-                        echo '<div class="gumbi-ucenik">';
-                        echo '<button class="gumb-izbrisi-ucenik">Izbriši</button>';
-                        echo '<button class="gumb-uredi-ucenik">Uredi</button>';
-                        echo '</div>';
-                        echo '</div>';
-                    }
-                    */
                 ?>
+                <div class="kartica-ucenik dodaj-ucenika">
+                    <a href="dodajucenika.php?id=<?php echo $id;?>" class="dodaj-ucenika">+</a>
+                </div>
             </div>
         </main>
     </div>
