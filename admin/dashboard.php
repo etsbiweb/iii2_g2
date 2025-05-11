@@ -21,6 +21,7 @@ $izostanci = $qIzostanci->fetchColumn();
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/kartica.css">
 
   </style>
 </head>
@@ -34,7 +35,15 @@ $izostanci = $qIzostanci->fetchColumn();
       <a href="dashboard.php" class="active"><i class="bi bi-house me-2"></i>Početna</a>
       <a href="#"><i class="bi bi-person me-2"></i>Učenici</a>
       <a href="#"><i class="bi bi-person-badge me-2"></i>Profesori</a>
-      <a href="#"><i class="bi bi-grid-3x3-gap me-2"></i>Razredi</a>
+      <div class="dropdown-container">
+                <a href="#"><i class="bi bi-grid-3x3-gap me-2"></i>Razredi</a>
+                <div class="dropdown-menu">
+                    <a href="prikaziucenike.php">I</a>
+                    <a href="#">II</a>
+                    <a href="#">III</a>
+                    <a href="#">IV</a>
+                </div>
+            </div>
       <a href="#"><i class="bi bi-book me-2"></i>Predmeti</a>
       <a href="#"><i class="bi bi-calendar-week me-2"></i>Raspored časova</a>
       <a href="#"><i class="bi bi-bar-chart me-2"></i>Izostanci</a>
@@ -67,7 +76,7 @@ $izostanci = $qIzostanci->fetchColumn();
           </div>
         </div>
       </div>
-
+       
       <div class="row g-3">
         <div class="col-md-6">
           <div class="card p-3">

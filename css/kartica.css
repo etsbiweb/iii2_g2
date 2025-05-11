@@ -1,0 +1,136 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.sidebar {
+    height: 100vh;
+    background: linear-gradient(to bottom, rgb(14, 25, 130), rgb(34, 46, 128), rgb(45, 58, 128));
+    color: white;
+    padding-top: 1rem;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    padding: 0.75rem 1rem;
+    display: block;
+    border-radius: 0.375rem;
+}
+
+.sidebar a.active, .sidebar a:hover {
+    background-color: rgb(31, 51, 163);
+}
+
+.content {
+    padding: 2rem;
+}
+
+.card-icon {
+    font-size: 2rem;
+}
+
+.dropdown-container {
+    position: relative;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    border-radius: 0.375rem;
+    transform: translateX(35px);
+}
+
+.dropdown-container:hover .dropdown-menu {
+    display: block;
+    background: linear-gradient(to bottom, rgb(14, 25, 130), rgb(34, 46, 128), rgb(45, 58, 128));
+}
+
+.dropdown-menu a {
+    color: #ffffff;
+    padding: 0.75rem 1rem;
+    display: block;
+    text-decoration: none;
+    text-align: left;
+    border-radius: 0.375rem;
+}
+
+.dropdown-menu a:hover {
+    background-color: rgb(31, 51, 163);
+}
+
+.ucenici-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; 
+    justify-content: flex-start; 
+}
+
+.kartica-ucenik {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 0.2rem;
+    padding: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.05);
+    width: calc(33.33% - 20px); 
+    box-sizing: border-box; 
+    text-align: center;
+}
+
+.ime-prezime-ucenik {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.gumbi-ucenik {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.gumb-izbrisi-ucenik {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 0.2rem;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.gumb-uredi-ucenik {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 0.2rem;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.gumb-izbrisi-ucenik:hover {
+    background-color: #c82333;
+}
+
+.gumb-uredi-ucenik:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 992px) {
+    .kartica-ucenik {
+        width: calc(50% - 20px); 
+    }
+}
+
+@media (max-width: 768px) {
+    .kartica-ucenik {
+        width: 100%; 
+    }
+}
