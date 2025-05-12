@@ -5,7 +5,7 @@ $qUcenik = $conn->prepare("SELECT ime_prezime FROM ucenici WHERE ucenik_id = :id
 $qUcenik->bindParam(":id", $_SESSION['id']);
 $qUcenik->execute();
 $imePrezime = $qUcenik->fetchColumn();
- ?>
+?>
 <!doctype html>
 <html lang="en">
     <head>

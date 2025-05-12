@@ -186,7 +186,7 @@ INSERT INTO `ucenici` (`ucenik_id`, `user_id`, `ime_prezime`, `jmbg`, `razred_id
 
 CREATE TABLE `users` (
   `user_id` int(11) NOT NULL,
-  `email` varchar(100) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL UNIQUE,
   `password` varchar(100) DEFAULT NULL,
   `pristup` enum('ucenik','admin','profesor') DEFAULT NULL,
   `token` varchar(100) DEFAULT NULL

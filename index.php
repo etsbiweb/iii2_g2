@@ -2,9 +2,6 @@
     require_once "includes/dbh.php";
     session_start();
     if(!isset($_SESSION['logged'])){
-        $_SESSION['access_error'] = '<div class="alert alert-danger" role="alert">
-        Morate se ulogovati da biste mogli pristupiti ovoj stranici
-        </div>';
         header("Location: login.php");
         exit();
     }

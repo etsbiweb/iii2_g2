@@ -1,8 +1,14 @@
 <?php
 require_once("../includes/dbh.php");
 require_once("../includes/razredi.php");
-require_once("../includes/admincheck.php")
+require_once("../includes/admincheck.php");
 
+$id = $_REQUEST['id'];
+
+$qFindRaz = $conn->prepare("SELECT godina, odjeljene FROM razred WHERE razred_id = :id");
+$qFindRaz->bindParam(":id", $id);
+$qFindRaz->execute();
+$qRaz = $qFindRaz->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,13 +58,21 @@ require_once("../includes/admincheck.php")
             <a href="../logout.php"><i class="bi bi-person me-2"></i>Log out</a>
         </nav>
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <?php
+            foreach($qRaz as $r)
+            {
+                 
+            ?>
+            <div class="naziv-razreda"><?php echo $r['godina']; echo $r['odjeljene'];?></div>
+            <?php 
+            } ?>
             <div class="ucenici-grid mt-3">
                 <?php
                     error_reporting(E_ALL);
                     ini_set('display_errors', 1);
                     ini_set('display_startup_errors', 1);
                     
-                    $id = $_REQUEST['id'];
+                  
                     $ucenikQuery = $conn->prepare("SELECT * FROM `ucenici` WHERE razred_id = :razred_id");
                     $ucenikQuery->bindParam(":razred_id", $id);
                     $ucenikQuery->execute();

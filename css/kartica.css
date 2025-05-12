@@ -85,7 +85,6 @@ body {
 
 .ime-prezime-ucenik {
     font-size: 1.5rem;
-    font-weight: bold;
     margin-bottom: 10px;
 }
 
@@ -125,6 +124,13 @@ body {
     background-color: #044e9e;
 }
 
+.naziv-razreda {
+    text-align: center;
+    font-size: 4rem; 
+    font-weight: bold; 
+    margin-bottom: 20px; 
+    color: #333;
+}
 
 
 

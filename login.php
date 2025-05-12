@@ -9,61 +9,56 @@
 
     if(isset($_POST['submit']))
     {
-        $error_list = array();
         $email = $_POST['email'];
         $password = $_POST['password'];
-
-        if(empty($email) || empty($password))
-        {
-            array_push($error_list,'Empty fields');
-        }
-
-        if(!filter_var($email, FILTER_VALIDATE_EMAIL))
-        {
-            array_push($error_list,'Invalid email');
-        }
 
         $query=$conn->prepare("SELECT * FROM `users` WHERE `email` = :email LIMIT 1");
         $query->bindParam(":email",$email);
         $query->execute();
         $row = $query->fetchAll(PDO::FETCH_ASSOC);
-
-        if(count($error_list) == 0)
+        if(!empty($row))
         {
-            if(!empty($row))
+            foreach($row as $result)
             {
-                foreach($row as $result)
+                if(password_verify($password, $result["password"]))
                 {
-                    if(password_verify($password, $result["password"]))
-                    {
-                        $_SESSION['logged'] = 'yes';
-                        $_SESSION['id'] = $result['user_id'];
-
-                        $roleFetch = $conn->prepare("SELECT pristup FROM users WHERE email = :email LIMIT 1");
-                        $roleFetch->bindParam(":email", $email);
-                        $roleFetch->execute();
-                        $role = $roleFetch->fetchColumn();
-                        header("Location: $role/dashboard.php");
-                        exit();
-                    }
-                    else
-                    {
-                        array_push( $error_list,"invalid password");
-                        header("Location: login.php?message=invalid_password");
-                        exit();
-                    }
+                    $_SESSION['logged'] = 'yes';
+                    $_SESSION['id'] = $result['user_id'];
+                    
+                    $roleFetch = $conn->prepare("SELECT pristup FROM users WHERE email = :email");
+                    $roleFetch->bindParam(":email", $email);
+                    $roleFetch->execute();
+                    $role = $roleFetch->fetchColumn();
+                    header("Location: $role/dashboard.php");
+                    exit();
                 }
-
-            }
-            else
-            {
-                header("Location: index.php?message=no_account");
-                exit();
+                else
+                {
+                    $_SESSION['login_error']='<div class="alert alert-danger" role="alert">
+                    Unijeli ste netačan password.
+                    </div>';
+                }
             }
         }
-        else{
-            header("Location: index.php?message=has_errors");
-            exit();
+        else
+        {
+            $_SESSION['login_error']='<div class="alert alert-danger" role="alert">
+            Account s datim E-mailom ne postoji.
+            </div>';
+        }
+
+        if(!filter_var($email, FILTER_VALIDATE_EMAIL))
+        {
+            $_SESSION['login_error']='<div class="alert alert-danger" role="alert">
+            Molimo Vas da unesete ispravan E-mail.
+            </div>';
+        }
+
+        if(empty($email) || empty($password))
+        {
+            $_SESSION['login_error']='<div class="alert alert-danger" role="alert">
+            Molimo Vas popunite sve podatke.
+            </div>';
         }
     }
 ?>
@@ -87,6 +82,11 @@
             echo $_SESSION['access_error'];
             unset( $_SESSION['access_error'] );
         }
+        if(isset($_SESSION["login_error"]))
+        {
+            echo $_SESSION['login_error'];
+            unset( $_SESSION['login_error'] );
+        }
     ?>
     <div class="container" id="container">
         <div class="form-container sign-in">
@@ -101,8 +101,8 @@
                     <a href="https://www.instagram.com/etsbi_/" class="icon" target="_blank"><i class="fa-brands fa-instagram"></i></a>
                 </div>
                 <span>or use your email password</span>
-                <input type="email" name="email" id="email" placeholder="Email" required>
-                <input type="password" name="password" id="password" placeholder="Password" required>
+                <input type="email" name="email" id="email" placeholder="Email">
+                <input type="password" name="password" id="password" placeholder="Password">
                 <a href="forgot-password.php">Forgot Your Password?</a>
                 <button type="submit" name="submit" id="submit">Sign In</button>
             </form>
@@ -117,7 +117,6 @@
             </div>
         </div>
     </div>
-
 </body>
 
 </html>

@@ -11,7 +11,7 @@ if(isset($_SESSION['logged']))
    if($role != 'admin')
    {
       $_SESSION['access_error']='<div class="alert alert-danger" role="alert">
-      Nemate ovlastenje za pristup ovoj stranici '.$_SESSION['id'].'
+      Nemate ovlaštenje za pristup ovoj stranici
       </div>';
       header("Location: ../index.php");
       exit();
@@ -19,6 +19,9 @@ if(isset($_SESSION['logged']))
 }
 else
 {
+   $_SESSION['access_error']='<div class="alert alert-danger" role="alert">
+   Morate biti ulogovani da biste pristupili ovoj stranici
+   </div>';
    header("Location: ../index.php");
    exit();
 }
