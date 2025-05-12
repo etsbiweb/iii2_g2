@@ -1,6 +1,7 @@
 <?php
 require_once("../includes/dbh.php");
 require_once("../includes/razredi.php");
+include_once("../includes/admincheck.php");
 
 $qUcenici = $conn->prepare("SELECT count(*) FROM ucenici;");
 $qUcenici->execute();
@@ -34,24 +35,27 @@ $izostanci = $qIzostanci->fetchColumn();
             <h5 class="px-3 fs-3 my-3">Admin panel</h5>
             <a href="dashboard.php" class="active"><i class="bi bi-house me-2"></i>Početna</a>
             <a href="#"><i class="bi bi-person-badge me-2"></i>Profesori</a>
-            <div class="dropdown-container">
+             <div class="dropdown-container">
                 <a href="#"><i class="bi bi-grid-3x3-gap me-2"></i>Razredi</a>
                 <ul class="dropdown-menu">
-                    <?php foreach ($razredi as $razred): ?>
+                    <?php
+                    foreach ($razredi as $razred)
+                    { ?>
                         <li class="has-submenu">
-                            <a href="#"><?php echo $razred['godina']; ?></a>
-                            <ul class="dropdown-submenu">
-                                <?php $odjeljenja = dohvatiOdjeljenja($conn, $razred); ?>
-                                <?php if (!empty($odjeljenja)): ?>
-                                    <?php foreach ($odjeljenja as $odjeljenje): ?>
-                                        <li><a href="prikaziucenike.php?id=<?php echo $odjeljenje['razred_id'];?>"><?php echo $odjeljenje['godina']; echo $odjeljenje['odjeljene']; ?></a></li>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <li><a href="#">Nema odjeljenja</a></li>
-                                <?php endif; ?>
-                            </ul>
+                        <a href="#"><?php echo $razred['godina']; ?></a>
+                        <ul class="dropdown-submenu">
+                        <?php $odjeljenja = dohvatiOdjeljenja($conn, $razred); ?>       
+                        <?php
+                        foreach ($odjeljenja as $odjeljenje)
+                        { ?>
+                        <li><a href="prikaziucenike.php?id=<?php echo $odjeljenje['razred_id'];?>"><?php echo $odjeljenje['godina']; echo $odjeljenje['odjeljene']; ?></a></li>
+                        <?php 
+                        }  
+                    ?>   
+                        </ul>
                         </li>
-                    <?php endforeach; ?>
+                    <?php 
+                    } ?>
                 </ul>
             </div>
             <a href="#"><i class="bi bi-book me-2"></i>Predmeti</a>
@@ -125,6 +129,13 @@ $izostanci = $qIzostanci->fetchColumn();
                         </ul>
                     </div>
                 </div>
+                <?php
+                if(isset($_SESSION['delete_msg']))
+                {
+                    echo $_SESSION['delete_msg'];
+                    unset($_SESSION['delete_msg']);
+                }
+                 ?>
             </div>
         </main>
     </div>

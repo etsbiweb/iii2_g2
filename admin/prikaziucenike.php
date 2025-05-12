@@ -1,6 +1,7 @@
 <?php
 require_once("../includes/dbh.php");
 require_once("../includes/razredi.php");
+require_once("../includes/admincheck.php")
 
 ?>
 <!DOCTYPE html>
@@ -24,21 +25,25 @@ require_once("../includes/razredi.php");
             <div class="dropdown-container">
                 <a href="#" class="active"><i class="bi bi-grid-3x3-gap me-2"></i>Razredi</a>
                 <ul class="dropdown-menu">
-                    <?php foreach ($razredi as $razred): ?>
+                    <?php
+                    foreach ($razredi as $razred)
+                    { ?>
                         <li class="has-submenu">
-                            <a href="#"><?php echo $razred['godina']; ?></a>
-                            <ul class="dropdown-submenu">
-                                <?php $odjeljenja = dohvatiOdjeljenja($conn, $razred); ?>
-                                <?php if (!empty($odjeljenja)): ?>
-                                    <?php foreach ($odjeljenja as $odjeljenje): ?>
-                                        <li><a href="prikaziucenike.php?id=<?php echo $odjeljenje['razred_id'];?>"><?php echo $odjeljenje['godina']; echo $odjeljenje['odjeljene']; ?></a></li>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <li><a href="#">Nema odjeljenja</a></li>
-                                <?php endif; ?>
+                        <a href="#"><?php echo $razred['godina']; ?></a>
+                        <ul class="dropdown-submenu">
+                        <?php $odjeljenja = dohvatiOdjeljenja($conn, $razred); ?>       
+                        <?php
+                        foreach ($odjeljenja as $odjeljenje)
+                        { ?>
+                        <li><a href="prikaziucenike.php?id=<?php echo $odjeljenje['razred_id'];?>"><?php echo $odjeljenje['godina']; echo $odjeljenje['odjeljene']; ?></a></li>
+                        <?php 
+                        }  
+                    ?>
+                               
                             </ul>
                         </li>
-                    <?php endforeach; ?>
+                    <?php 
+                    } ?>
                 </ul>
             </div>
             <a href="#"><i class="bi bi-book me-2"></i>Predmeti</a>
@@ -65,6 +70,7 @@ require_once("../includes/razredi.php");
                             echo '
                                 <div class="kartica-ucenik">
                                     <div class="ime-prezime-ucenik">
+                                        '.$ucenik['ucenik_id'].' 
                                         '.$ucenik['ime_prezime'].'<br>
                                         Opravdani: '.$ucenik['opravdani'].' <br>
                                         Neopravdani: '.$ucenik['neopravdani'].' <br>

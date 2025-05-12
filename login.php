@@ -12,7 +12,7 @@
         $error_list = array();
         $email = $_POST['email'];
         $password = $_POST['password'];
-        
+
         if(empty($email) || empty($password))
         {
             array_push($error_list,'Empty fields');
@@ -22,7 +22,7 @@
         {
             array_push($error_list,'Invalid email');
         }
-        
+
         $query=$conn->prepare("SELECT * FROM `users` WHERE `email` = :email LIMIT 1");
         $query->bindParam(":email",$email);
         $query->execute();
@@ -38,14 +38,12 @@
                     {
                         $_SESSION['logged'] = 'yes';
                         $_SESSION['id'] = $result['user_id'];
-                        
+
                         $roleFetch = $conn->prepare("SELECT pristup FROM users WHERE email = :email LIMIT 1");
                         $roleFetch->bindParam(":email", $email);
                         $roleFetch->execute();
                         $role = $roleFetch->fetchColumn();
                         header("Location: $role/dashboard.php");
-                                                 
-                        //header("Location: index.php?message=logged_successfully");
                         exit();
                     }
                     else
@@ -55,7 +53,7 @@
                         exit();
                     }
                 }
-                
+
             }
             else
             {
@@ -76,13 +74,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <title>Login</title>
 </head>
 
 <body>
-
+    <?php
+        if(isset($_SESSION["access_error"]))
+        {
+            echo $_SESSION['access_error'];
+            unset( $_SESSION['access_error'] );
+        }
+    ?>
     <div class="container" id="container">
         <div class="form-container sign-in">
             <form action="login.php" method="post">
@@ -96,13 +101,13 @@
                     <a href="https://www.instagram.com/etsbi_/" class="icon" target="_blank"><i class="fa-brands fa-instagram"></i></a>
                 </div>
                 <span>or use your email password</span>
-                <input type="email" name="email" id="email" placeholder="Email">
-                <input type="password" name="password" id="password" placeholder="Password">
+                <input type="email" name="email" id="email" placeholder="Email" required>
+                <input type="password" name="password" id="password" placeholder="Password" required>
                 <a href="forgot-password.php">Forgot Your Password?</a>
                 <button type="submit" name="submit" id="submit">Sign In</button>
             </form>
         </div>
-    
+        
         <div class="toggle-container">
             <div class="toggle">
                 <div class="toggle-panel toggle-right">
@@ -113,7 +118,6 @@
         </div>
     </div>
 
-    <!--<script src="scripts/script.js"></script>-->
 </body>
 
 </html>
