@@ -9,8 +9,6 @@
 
     $razred_id = $_REQUEST['id'];
     if(isset($_POST['submit'])){
-       
-
         $ime = $_POST['student_name'];
         $email = $_POST['student_email'];
         $jmbg = $_POST['student_jmbg'];
@@ -45,10 +43,8 @@
 
             $email_class = new Mail();
 
-            $user_message = '
-                Click this link to verify your profile, enter your desired password and confirm it then you can log in to the our site
-
-                http://localhost/iii2_g2/forgot-password.php?token='.$token.'
+            $user_message = 'Click this link to verify your profile, enter your desired password and confirm it then you can log in to the our site.
+                http://localhost/iii2_g2/verify-password.php?token='.$token.'
             
             ';
             $email_class->SendMail($email,'elearning@gmail.com','Verify Profile',$user_message);
