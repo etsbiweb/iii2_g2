@@ -1,6 +1,5 @@
 <?php 
     require_once "includes/dbh.php";
-    session_start();
     if(!isset($_SESSION['logged'])){
         header("Location: login.php");
         exit();
@@ -13,6 +12,7 @@
         $qRole->execute();
         $role= $qRole->fetchColumn();
         header("Location: $role/dashboard.php");
+        exit();
     }
 ?>
 
