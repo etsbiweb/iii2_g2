@@ -1,5 +1,4 @@
 <?php
-    session_start();
     require_once("includes/dbh.php");
     if(isset($_SESSION['logged']))
     {

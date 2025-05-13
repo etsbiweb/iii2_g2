@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 $dbname = "elearning";
 $server = "localhost:3306";
 $user = "root";

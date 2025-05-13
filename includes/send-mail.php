@@ -5,7 +5,7 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 
-require 'vendor/autoload.php';
+require ''.$_SERVER['DOCUMENT_ROOT'].'/iii2_g2/vendor/autoload.php';
 
 class Mail{
     public $mail;

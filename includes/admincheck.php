@@ -1,6 +1,5 @@
 <?php
 include_once("dbh.php");
-session_start();
 if(isset($_SESSION['logged']))
 {
    $qCheck = $conn->prepare("SELECT pristup FROM users WHERE user_id = :id");

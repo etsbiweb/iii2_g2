@@ -4,7 +4,6 @@
     error_reporting(E_ALL);
     require_once("includes/send-mail.php");
     require_once("includes/dbh.php");
-    session_start();
 
     if(isset($_POST['submit']))
     {
