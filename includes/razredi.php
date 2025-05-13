@@ -11,4 +11,6 @@ function dohvatiOdjeljenja($conn, $razred)
     $qOdjeljenja->execute();
     return $qOdjeljenja->fetchAll(PDO::FETCH_ASSOC);
 }
+
+
  ?>
