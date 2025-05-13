@@ -27,8 +27,6 @@
             $queryUserInsert->execute();
             $user_row = $queryUserInsert->fetch(PDO::FETCH_ASSOC);
 
-
-
             $queryUcenikInsert = $conn->prepare("INSERT INTO `ucenici`(`user_id`, `ime_prezime`, `jmbg`, `razred_id`, `opravdani`, `neopravdani`) VALUES (:user_id,:ime,:jmbg,:razred_id,:opravdani,:neopravdani)");
 
             $izostanciDef = 0;
@@ -71,10 +69,10 @@
         <div class="row">
             <nav class="col-md-2 sidebar">
                 <h5 class="px-3 fs-3 my-3">Admin panel</h5>
-                <a href="dashboard.php" class="active"><i class="bi bi-house me-2"></i>Početna</a>
+                <a href="dashboard.php"><i class="bi bi-house me-2"></i>Početna</a>
                 <a href="#"><i class="bi bi-person-badge me-2"></i>Profesori</a>
                 <div class="dropdown-container">
-                    <a href="#"><i class="bi bi-grid-3x3-gap me-2"></i>Razredi</a>
+                    <a href="#" class="active"><i class="bi bi-grid-3x3-gap me-2"></i>Razredi</a>
                     <ul class="dropdown-menu">
                         <?php
                         foreach ($razredi as $razred)
