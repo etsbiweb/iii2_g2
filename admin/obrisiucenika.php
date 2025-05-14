@@ -34,20 +34,20 @@ if($qFind->rowCount() > 0)
     $_SESSION['delete_msg'] = '<div class="alert alert-success" role="alert">
     Učenik uspješno obrisan 
     </div>';
-    header("Location: ../index.php");
 }
 else
 {
     $_SESSION['delete_msg']='<div class="alert alert-danger" role="alert">
     Učenik nije pronađen 
     </div>';
-    header("Location: ../index.php");
 }
 
-if($qFindAcc->rowCount() > 0)
+if(isset($qFindAcc))
 {
     $qObrisi = $conn->prepare('DELETE FROM users WHERE user_id = :id');
     $qObrisi->bindParam(':id', $qIdAcc);
     $qObrisi->execute();
+    header("Location: ../index.php");
+    exit();
 }
 ?>

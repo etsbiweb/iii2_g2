@@ -1,49 +1,51 @@
-<?php
+    <?php
     require_once("../includes/dbh.php");
     require_once("../includes/admincheck.php");
     require_once("../includes/razredi.php");
-    require_once("../includes/send-mail.php");
     //require_once("../includes/log.php");
 
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
 
+    $id = $_REQUEST['id'];
+    $qFind = $conn->prepare('SELECT * FROM users INNER JOIN profesor ON profesor.user_id = users.user_id AND profesor.profesor_id = :id');
+    $qFind->bindParam(":id", $id);
+    $qFind->execute();
+    if($qFind->rowCount() > 0)
+    {
+        $prof = $qFind->fetch(PDO::FETCH_ASSOC);
+    }
+    else
+    {
+        $_SESSION['delete_msg'] = '<div class="alert alert-danger" role="alert">
+        Profesor nije pronađen 
+        </div>';
+        header('Location: dashboard.php');
+        exit();
+    }
 
     if(isset($_POST['submit']))
     {
         $ime_prezime = $_POST['profesor_ime'];
         $email = $_POST['profesor_email'];
-
-        if(!empty($ime_prezime) && !empty($email))
+        if(!empty($email) && !empty($ime_prezime))
         {
-            $token = bin2hex(random_bytes(32));
-            $pristup='profesor';
-            $qUser = $conn->prepare('INSERT INTO users (`email`, `pristup`, `token`) VALUES (:email, :pristup, :token)');
-            $qUser->bindParam(':email', $email);
-            $qUser->bindParam(':pristup', $pristup);
-            $qUser->bindParam(':token', $token);
-            $qUser->execute();
+            $qUpdate = $conn->prepare('UPDATE `profesor` SET `ime_prezime` = :ime WHERE profesor_id = :id');
+            $qUpdate->bindParam(':ime', $ime_prezime);
+            $qUpdate->bindParam(':id', $id);
+            $qUpdate->execute();
 
-            $qUser=$conn->prepare('SELECT user_id FROM users WHERE email = :email');
-            $qUser->bindParam(':email', $email);
-            $qUser->execute();
-            $id = $qUser->fetchColumn();
+            $qUpdate = $conn->prepare('UPDATE `users` SET `email`= :email WHERE user_id = :id');
+            $qUpdate->bindParam(':id', $prof['user_id']);
+            $qUpdate->bindParam(':email', $email);
+            $qUpdate->execute();
 
-            $qProfesor = $conn->prepare("INSERT INTO `profesor`(`user_id`, `ime_prezime`) VALUES (:user_id, :ime_prezime);");
-            $qProfesor->bindParam(":user_id", $id);
-            $qProfesor->bindParam(":ime_prezime", $ime_prezime);
-            $qProfesor->execute();
-
-            $email_class = new Mail();
-            $user_message = 'Click this link to verify your profile, enter your desired password and confirm it then you can log in to the our site.
-            http://localhost/iii2_g2/verify-password.php?token='.$token;
-            $email_class->SendMail($email,'elearning@gmail.com','Verify Profile',$user_message);
-            
-            $_SESSION['delete_msg'] = '<div class="alert alert-success" role="alert">
-            Profesor uspješno dodan
+            $_SESSION['delete_msg'] = '<div class="alert alert-success my-3" role="alert">
+            Novi podaci su uspješno sačuvani
             </div>';
             header('Location: dashboard.php');
+            exit();
         }
         else
         {
@@ -101,15 +103,16 @@
             </nav>
 
             <main class="col-md-10 content">
-                <h3 class="text-align-center">Dodavanje profesora</h3>
+                <h3 class="text-align-center">Promjena podataka o profesoru:</h3>
+
                 <form action="" method="post">
                     <div class="mt-3">
                         <label for="profesor_ime" class="form-label">Ime i Prezime:</label>
-                        <input type="text" name="profesor_ime" id="profesor_ime" class="form-control" placeholder="Ime Prezime" >
+                        <input type="text" name="profesor_ime" id="profesor_ime" class="form-control" placeholder="Ime Prezime" value="<?php echo $prof['ime_prezime']; ?>" required>
                     </div>
                     <div class="mt-3">
                         <label for="profesor_email" class="form-label">Email:</label>
-                        <input type="email" name="profesor_email" id="profesor_email" class="form-control" placeholder="Email" >
+                        <input type="email" name="profesor_email" id="profesor_email" class="form-control" placeholder="Email" value="<?php echo $prof['email']; ?>" required>
                     </div>
                     <div class="mt-3">
                         <button type="submit" class="btn btn-primary" name="submit" id="submit">Submit</button>

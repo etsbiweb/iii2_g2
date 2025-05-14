@@ -1,60 +1,51 @@
 <?php
     require_once("../includes/dbh.php");
     require_once("../includes/admincheck.php");
-    require_once("../includes/send-mail.php");
     require_once("../includes/razredi.php");
-    //require_once("../includes/log.php");
 
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 
-    //$logs = new Log;
-    $razred_id = $_REQUEST['id'];
-    if(isset($_POST['submit'])){
+    $id = $_REQUEST['id'];
+    $qFind = $conn->prepare('SELECT * FROM ucenici, users WHERE ucenici.ucenik_id = :id AND ucenici.user_id = users.user_id');
+    $qFind->bindValue(':id', $id);
+    $qFind->execute();
+    $ucenik = $qFind->fetch(PDO::FETCH_ASSOC);
+    
+    if(isset($_POST['submit']))
+    {
         $ime = $_POST['student_name'];
         $email = $_POST['student_email'];
         $jmbg = $_POST['student_jmbg'];
 
-        if(!empty($razred_id) && !empty($ime) && !empty($email) && !empty($jmbg)){
-            $token = bin2hex(random_bytes(32));
-            $queryUserInsert = $conn->prepare("INSERT INTO `users`(`email`, `pristup`, `token`) VALUES (:email,:pristup,:token)");
-            $queryUserInsert->bindParam(":email",$email);
-            $pristupUcenika="ucenik";
-            $queryUserInsert->bindParam(":pristup",$pristupUcenika);
-            $queryUserInsert->bindParam(":token",$token);
-            $queryUserInsert->execute();
+        if(!empty($ime) && !empty($email) && !empty($jmbg))
+        {
+            $qUpdate = $conn->prepare('UPDATE `ucenici` SET `ime_prezime`= :ime,`jmbg`= :jmbg WHERE ucenici.ucenik_id = :id');
+            $qUpdate->bindParam(':ime', $ime);
+            $qUpdate->bindParam(':jmbg', $jmbg);
+            $qUpdate->bindParam(':id', $ucenik['ucenik_id']);
+            $qUpdate->execute();
 
-            $queryUserInsert = $conn->prepare("SELECT user_id FROM `users` WHERE `token` = :token");
-            $queryUserInsert->bindParam(":token",$token);
-            $queryUserInsert->execute();
-            $user_row = $queryUserInsert->fetch(PDO::FETCH_ASSOC);
+            $qUpdate = $conn->prepare('UPDATE `users` SET `email`= :email WHERE user_id = :id');
+            $qUpdate->bindParam(':id', $ucenik['user_id']);
+            $qUpdate->bindParam(':email', $email);
+            $qUpdate->execute();
 
-            $queryUcenikInsert = $conn->prepare("INSERT INTO `ucenici`(`user_id`, `ime_prezime`, `jmbg`, `razred_id`, `opravdani`, `neopravdani`) VALUES (:user_id,:ime,:jmbg,:razred_id,:opravdani,:neopravdani)");
-
-            $izostanciDef = 0;
-            $queryUcenikInsert->bindParam(":user_id",$user_row['user_id']);
-            $queryUcenikInsert->bindParam(":ime",$ime);
-            $queryUcenikInsert->bindParam(":jmbg",$jmbg);
-            $queryUcenikInsert->bindParam(":razred_id",$razred_id);
-            $queryUcenikInsert->bindParam(":opravdani",$izostanciDef);
-            $queryUcenikInsert->bindParam(":neopravdani",$izostanciDef);
-            $queryUcenikInsert->execute();
-
-            $email_class = new Mail();
-
-            $user_message = 'Click this link to verify your profile, enter your desired password and confirm it then you can log in to the our site.
-                http://localhost/iii2_g2/verify-password.php?token='.$token.'
-            
-            ';
-            $email_class->SendMail($email,'elearning@gmail.com','Verify Profile',$user_message);
-
-            $razred = $conn->prepare("SELECT CONCAT(`godina`,' ',`odjeljene`) AS raz FROM `razred` WHERE `razred_id` = :class_id");
-            $razred->bindParam(":class_id",$razred_id);
-           // $logs->newLog("Dodan novi ucenik ".$ime." u razred ".$razred['raz']."");
+            $_SESSION['delete_msg'] = '<div class="alert alert-success my-3" role="alert">
+            Novi podaci su uspješno sačuvani
+            </div>';
+            header('Location: dashboard.php');
+            exit();
         }
-
+        else
+        {
+            $message = '<div class="alert alert-danger my-3" role="alert">
+            Molimo popunite sve podatke
+            </div>';
+        }
     }
+    
 ?>
 
 
@@ -111,26 +102,27 @@
             <main class="col-md-10 content">
 
                 <h3 class="text-align-center">Dodaj ucenika</h3>
-                <form action="dodajucenika.php?id=<?php echo $razred_id; ?>" method="post">
+                <form action="" method="post">
                     <div class="mt-3">
                         <label for="student_name" class="form-label">Name: </label>
-                        <input type="text" name="student_name" id="student_name" class="form-control" placeholder="Full Name" required>
+                        <input type="text" name="student_name" id="student_name" class="form-control" placeholder="Full Name" value="<?php echo $ucenik['ime_prezime'] ?>" required>
                     </div>
 
                     <div class="mt-3">
                         <label for="student_email" class="form-label">Email: </label>
-                        <input type="email" name="student_email" id="student_email" class="form-control" placeholder="Email" required>
+                        <input type="email" name="student_email" id="student_email" class="form-control" placeholder="Email" value="<?php echo $ucenik['email'] ?>" required>
                     </div>
                     
                     <div class="mt-3">
                         <label for="student_jmbg" class="form-label">JMBG: </label>
-                        <input type="number" name="student_jmbg" id="student_jmbg" class="form-control" placeholder="JMBG" required>
+                        <input type="number" name="student_jmbg" id="student_jmbg" class="form-control" placeholder="JMBG" value="<?php echo $ucenik['jmbg'] ?>" required>
                     </div>
 
                     <div class="mt-3">
                         <button type="submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </form>
+                <?php if(isset($message)): echo $message; endif; ?>
             </main>
         </div>
     </div>
