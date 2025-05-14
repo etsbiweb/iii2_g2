@@ -1,7 +1,7 @@
 <?php
     require_once("../includes/dbh.php");
     require_once("../includes/admincheck.php");
-    require_once("../includes/log.php");
+    //require_once("../includes/log.php");
     require_once("../includes/razredi.php");
 
     
@@ -54,7 +54,7 @@
             </nav>
 
             <main class="col-md-10 content">
-                <h3 class="text-align-center">Lista profesora</h3>
+                <div class="naziv-razreda">Lista profesora</div>
                 
                 <div class="ucenici-grid mt-3">
                     <?php
@@ -83,6 +83,9 @@
                             }
                         }
                     ?>
+                    <div class="kartica-ucenik dodaj">
+                        <a href="dodajprofesora.php"class="dodaj">+</a>
+                    </div>
                 </div>
             </main>
         </div>

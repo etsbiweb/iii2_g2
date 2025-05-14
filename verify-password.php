@@ -30,7 +30,13 @@ if (isset($_POST['submit'])) {
             $queryUpdateUser->bindParam(":user_id", $user_row['user_id']);
             $queryUpdateUser->execute();
             
-            $message = "Password updated successfully.";
+            $_SESSION['login_error'] = '<div class="alert alert-success" role="alert">
+            Uspješno ste verifikovali svoj password. 
+            </div>';
+            unset($_SESSION['logged']);
+            unset($_SESSION['id']);
+            header("Location: index.php");
+            exit();
         } else {
             $message = "Invalid or expired token.";
         }

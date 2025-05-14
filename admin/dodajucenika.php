@@ -2,13 +2,13 @@
     require_once("../includes/dbh.php");
     require_once("../includes/admincheck.php");
     require_once("../includes/send-mail.php");
-    require_once("../includes/log.php");
+    //require_once("../includes/log.php");
 
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 
-    $logs = new Log;
+    //$logs = new Log;
     $razred_id = $_REQUEST['id'];
     if(isset($_POST['submit'])){
         $ime = $_POST['student_name'];
@@ -50,7 +50,7 @@
 
             $razred = $conn->prepare("SELECT CONCAT(`godina`,' ',`odjeljene`) AS raz FROM `razred` WHERE `razred_id` = :class_id");
             $razred->bindParam(":class_id",$razred_id);
-            $logs->newLog("Dodan novi ucenik ".$ime." u razred ".$razred['raz']."");
+           // $logs->newLog("Dodan novi ucenik ".$ime." u razred ".$razred['raz']."");
         }
 
     }

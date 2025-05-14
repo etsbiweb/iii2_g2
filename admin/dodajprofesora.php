@@ -1,21 +1,44 @@
 <?php
     require_once("../includes/dbh.php");
     require_once("../includes/admincheck.php");
-    require_once("../includes/log.php");
+    require_once("../includes/razredi.php");
+    require_once("../includes/send-mail.php");
+    //require_once("../includes/log.php");
 
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
 
 
-    if(!isset($_POST['submit']))
+    if(isset($_POST['submit']))
     {
         $ime_prezime = $_POST['profesor_ime'];
         $email = $_POST['profesor_email'];
 
         if(!empty($ime_prezime) && !empty($email))
         {
-            $queryProfesor = $conn->prepare("INSERT INTO `profesor`(`user_id`, `ime_prezime`) VALUES (:user_id,:ime_prezime);");
+            $token = bin2hex(random_bytes(32));
+            $pristup='profesor';
+            $qUser = $conn->prepare('INSERT INTO users (`email`, `pristup`, `token`) VALUES (:email, :pristup, :token)');
+            $qUser->bindParam(':email', $email);
+            $qUser->bindParam(':pristup', $pristup);
+            $qUser->bindParam(':token', $token);
+            $qUser->execute();
+
+            $qUser=$conn->prepare('SELECT user_id FROM users WHERE email = :email');
+            $qUser->bindParam(':email', $email);
+            $qUser->execute();
+            $id = $qUser->fetchColumn();
+
+            $qProfesor = $conn->prepare("INSERT INTO `profesor`(`user_id`, `ime_prezime`) VALUES (:user_id, :ime_prezime);");
+            $qProfesor->bindParam(":user_id", $id);
+            $qProfesor->bindParam(":ime_prezime", $ime_prezime);
+            $qProfesor->execute();
+
+            $email_class = new Mail();
+            $user_message = 'Click this link to verify your profile, enter your desired password and confirm it then you can log in to the our site.
+            http://localhost/iii2_g2/verify-password.php?token='.$token;
+            $email_class->SendMail($email,'elearning@gmail.com','Verify Profile',$user_message);
         }
     }
 ?>
@@ -71,12 +94,12 @@
 
                 <form action="" method="post">
                     <div class="mt-3">
-                        <input type="text" name="profesor_ime" id="profesor_ime" class="form-control" placeholder="Ime Prezime" required>
                         <label for="profesor_ime" class="form-label">Ime i Prezime:</label>
+                        <input type="text" name="profesor_ime" id="profesor_ime" class="form-control" placeholder="Ime Prezime" required>
                     </div>
                     <div class="mt-3">
-                        <input type="email" name="profesor_email" id="profesor_email" class="form-control" placeholder="Email" required>
                         <label for="profesor_email" class="form-label">Email:</label>
+                        <input type="email" name="profesor_email" id="profesor_email" class="form-control" placeholder="Email" required>
                     </div>
                     <div class="mt-3">
                         <button type="submit" class="btn btn-primary" name="submit" id="submit">Submit</button>

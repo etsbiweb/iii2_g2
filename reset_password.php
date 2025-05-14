@@ -43,7 +43,12 @@ if(isset($_POST['submit'])){
     $deleteQuery->bindValue(":token",$token);
     $deleteQuery->execute();
 
-    header('Location: login.php?message=password_reset_successfull');
+    $_SESSION['login_error'] = '<div class="alert alert-success" role="alert">
+    Uspješno ste promijenili svoju šifru
+    </div>';
+    unset($_SESSION['logged']);
+    unset($_SESSION['id']);
+    header("Location: index.php");
     exit();
 }
 ?>

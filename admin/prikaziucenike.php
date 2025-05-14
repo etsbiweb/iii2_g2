@@ -98,8 +98,8 @@ $qRaz = $qFindRaz->fetchAll(PDO::FETCH_ASSOC);
                         }
                     }
                 ?>
-                <div class="kartica-ucenik dodaj-ucenika">
-                    <a href="dodajucenika.php?id=<?php echo $id;?>" class="dodaj-ucenika">+</a>
+                <div class="kartica-ucenik dodaj">
+                    <a href="dodajucenika.php?id=<?php echo $id;?>" class="dodaj">+</a>
                 </div>
             </div>
         </main>
