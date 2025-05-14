@@ -2,11 +2,13 @@
     require_once("../includes/dbh.php");
     require_once("../includes/admincheck.php");
     require_once("../includes/send-mail.php");
+    require_once("../includes/log.php");
 
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 
+    $logs = new Log;
     $razred_id = $_REQUEST['id'];
     if(isset($_POST['submit'])){
         $ime = $_POST['student_name'];
@@ -30,7 +32,6 @@
             $queryUcenikInsert = $conn->prepare("INSERT INTO `ucenici`(`user_id`, `ime_prezime`, `jmbg`, `razred_id`, `opravdani`, `neopravdani`) VALUES (:user_id,:ime,:jmbg,:razred_id,:opravdani,:neopravdani)");
 
             $izostanciDef = 0;
-
             $queryUcenikInsert->bindParam(":user_id",$user_row['user_id']);
             $queryUcenikInsert->bindParam(":ime",$ime);
             $queryUcenikInsert->bindParam(":jmbg",$jmbg);
@@ -46,6 +47,10 @@
             
             ';
             $email_class->SendMail($email,'elearning@gmail.com','Verify Profile',$user_message);
+
+            $razred = $conn->prepare("SELECT CONCAT(`godina`,' ',`odjeljene`) AS raz FROM `razred` WHERE `razred_id` = :class_id");
+            $razred->bindParam(":class_id",$razred_id);
+            $logs->newLog("Dodan novi ucenik ".$ime." u razred ".$razred['raz']."");
         }
 
     }
@@ -70,7 +75,7 @@
             <nav class="col-md-2 sidebar">
                 <h5 class="px-3 fs-3 my-3">Admin panel</h5>
                 <a href="dashboard.php"><i class="bi bi-house me-2"></i>Početna</a>
-                <a href="#"><i class="bi bi-person-badge me-2"></i>Profesori</a>
+                <a href="prikaziprofesore.php"><i class="bi bi-person-badge me-2"></i>Profesori</a>
                 <div class="dropdown-container">
                     <a href="#" class="active"><i class="bi bi-grid-3x3-gap me-2"></i>Razredi</a>
                     <ul class="dropdown-menu">
