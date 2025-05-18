@@ -2,41 +2,36 @@
     require_once("../includes/dbh.php");
     require_once("../includes/admincheck.php");
     require_once("../includes/razredi.php");
+    require_once("../includes/send-mail.php");
+    //require_once("../includes/log.php");
 
+    error_reporting(E_ALL);
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
 
-    $id = $_REQUEST['id'];
-    $qFind = $conn->prepare('SELECT * FROM ucenici, users WHERE ucenici.ucenik_id = :id AND ucenici.user_id = users.user_id');
-    $qFind->bindValue(':id', $id);
-    $qFind->execute();
-    $ucenik = $qFind->fetch(PDO::FETCH_ASSOC);
-    
+    $id=$_REQUEST['id'];
+    $qSelect = $conn->prepare('SELECT * FROM predmet WHERE predmet_id = :id');
+    $qSelect->bindParam(':id', $id);
+    $qSelect->execute();
+    $predmet = $qSelect->fetch(PDO::FETCH_ASSOC);
+
     if(isset($_POST['submit']))
     {
-        $ime = $_POST['student_name'];
-        $email = $_POST['student_email'];
-        $jmbg = $_POST['student_jmbg'];
+        $naziv_predmeta = $_POST['naziv_predmeta'];
+        $boja = $_POST['boja'];
 
-        if(!empty($ime) && !empty($email) && !empty($jmbg))
+        if(!empty($naziv_predmeta) && !empty($boja))
         {
-            $qUpdate = $conn->prepare('UPDATE `ucenici` SET `ime_prezime`= :ime,`jmbg`= :jmbg WHERE ucenici.ucenik_id = :id');
-            $qUpdate->bindParam(':ime', $ime);
-            $qUpdate->bindParam(':jmbg', $jmbg);
-            $qUpdate->bindParam(':id', $ucenik['ucenik_id']);
-            $qUpdate->execute();
+            $qUpdate = $conn->prepare("UPDATE predmet SET ime_predmeta = :naziv, boja = :boja WHERE predmet_id = :id");
+            $qUpdate->bindParam(":naziv", $naziv_predmeta);
+            $qUpdate->bindParam(":boja",$boja);
+            $qUpdate->bindParam(':id',$id);
+            $qUpdate->execute();            
 
-            $qUpdate = $conn->prepare('UPDATE `users` SET `email`= :email WHERE user_id = :id');
-            $qUpdate->bindParam(':id', $ucenik['user_id']);
-            $qUpdate->bindParam(':email', $email);
-            $qUpdate->execute();
-
-            $_SESSION['delete_msg'] = '<div class="alert alert-success my-3" role="alert">
-            Novi podaci su uspješno sačuvani
+            $_SESSION['delete_msg'] = '<div class="alert alert-success" role="alert">
+            Novi podaci su uspješno sačuvani.
             </div>';
             header('Location: dashboard.php');
-            exit();
         }
         else
         {
@@ -45,11 +40,7 @@
             </div>';
         }
     }
-    
 ?>
-
-
-
 
 <!DOCTYPE html>
 <html lang="sr">
@@ -67,9 +58,9 @@
             <nav class="col-md-2 sidebar">
                 <h5 class="px-3 fs-3 my-3">Admin panel</h5>
                 <a href="dashboard.php"><i class="bi bi-house me-2"></i>Početna</a>
-                <a href="prikaziprofesore.php"><i class="bi bi-person-badge me-2"></i>Profesori</a>
+                <a href="prikaziprofesore.php" class="active"><i class="bi bi-person-badge me-2"></i>Profesori</a>
                 <div class="dropdown-container">
-                    <a href="#" class="active"><i class="bi bi-grid-3x3-gap me-2"></i>Razredi</a>
+                    <a href="#"><i class="bi bi-grid-3x3-gap me-2"></i>Razredi</a>
                     <ul class="dropdown-menu">
                         <?php
                         foreach ($razredi as $razred)
@@ -80,7 +71,8 @@
                             <?php $odjeljenja = dohvatiOdjeljenja($conn, $razred); ?>       
                             <?php
                             foreach ($odjeljenja as $odjeljenje)
-                            { ?>
+                            {
+                            ?>
                             <li><a href="prikaziucenike.php?id=<?php echo $odjeljenje['razred_id'];?>"><?php echo $odjeljenje['godina']; echo $odjeljenje['odjeljene']; ?></a></li>
                             <?php 
                             }  
@@ -96,30 +88,20 @@
                 <a href="#"><i class="bi bi-bar-chart me-2"></i>Izostanci</a>
                 <a href="../logout.php"><i class="bi bi-person me-2"></i>Log out</a>
             </nav>
-        
-
 
             <main class="col-md-10 content">
-
-                <h3 class="text-align-center">Dodaj ucenika</h3>
+                <h3 class="text-align-center">Dodavanje predmeta</h3>
                 <form action="" method="post">
                     <div class="mt-3">
-                        <label for="student_name" class="form-label">Name: </label>
-                        <input type="text" name="student_name" id="student_name" class="form-control" placeholder="Full Name" value="<?php echo $ucenik['ime_prezime'] ?>" required>
+                        <label for="naziv_predmeta" class="form-label">Naziv predmeta:</label>
+                        <input type="text" name="naziv_predmeta" id="naziv_predmeta" class="form-control" placeholder="Naziv" value="<?php echo $predmet['ime_predmeta'];?>" required>
                     </div>
-
                     <div class="mt-3">
-                        <label for="student_email" class="form-label">Email: </label>
-                        <input type="email" name="student_email" id="student_email" class="form-control" placeholder="Email" value="<?php echo $ucenik['email'] ?>" required>
+                        <label for="boja" class="form-label mx-1">Boja:</label>
+                        <input type="color" name="boja" id="boja" value="<?php echo $predmet['boja'];?>">
                     </div>
-                    
                     <div class="mt-3">
-                        <label for="student_jmbg" class="form-label">JMBG: </label>
-                        <input type="number" name="student_jmbg" id="student_jmbg" class="form-control" placeholder="JMBG" value="<?php echo $ucenik['jmbg'] ?>" required>
-                    </div>
-
-                    <div class="mt-3">
-                        <button type="submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary" name="submit" id="submit">Submit</button>
                     </div>
                 </form>
                 <?php if(isset($message)): echo $message; endif; ?>

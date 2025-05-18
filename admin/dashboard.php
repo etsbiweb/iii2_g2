@@ -11,7 +11,7 @@ $qProfesori = $conn->prepare("SELECT count(*) FROM profesor;");
 $qProfesori->execute();
 $profesori = $qProfesori->fetchColumn();
 
-$qIzostanci = $conn->prepare("SELECT count(*) FROM izostanci WHERE DATE(vrijeme) = CURDATE()");
+$qIzostanci = $conn->prepare("SELECT count(*) FROM izostanci WHERE MONTH(vrijeme) = MONTH(CURDATE())");
 $qIzostanci->execute();
 $izostanci = $qIzostanci->fetchColumn();
 
@@ -58,7 +58,7 @@ $izostanci = $qIzostanci->fetchColumn();
                     } ?>
                 </ul>
             </div>
-            <a href="#"><i class="bi bi-book me-2"></i>Predmeti</a>
+            <a href="prikazipredmete.php"><i class="bi bi-book me-2"></i>Predmeti</a>
             <a href="#"><i class="bi bi-calendar-week me-2"></i>Raspored časova</a>
             <a href="#"><i class="bi bi-bar-chart me-2"></i>Izostanci</a>
             <a href="../logout.php"><i class="bi bi-person me-2"></i>Log out</a>
@@ -84,7 +84,7 @@ $izostanci = $qIzostanci->fetchColumn();
                 <div class="col-md-4">
                     <div class="card text-center p-3">
                         <i class="bi bi-exclamation-triangle card-icon mb-2"></i>
-                        <h6>Izostanci danas</h6>
+                        <h6>Izostanci ovaj mjesec</h6>
                         <h3><?php echo $izostanci; ?></h3>
                     </div>
                 </div>

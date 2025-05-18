@@ -23,7 +23,7 @@
             <nav class="col-md-2 sidebar">
                 <h5 class="px-3 fs-3 my-3">Admin panel</h5>
                 <a href="dashboard.php"><i class="bi bi-house me-2"></i>Početna</a>
-                <a href="prikaziprofesore.php" class="active"><i class="bi bi-person-badge me-2"></i>Profesori</a>
+                <a href="prikaziprofesore.php"><i class="bi bi-person-badge me-2"></i>Profesori</a>
                 <div class="dropdown-container">
                     <a href="#"><i class="bi bi-grid-3x3-gap me-2"></i>Razredi</a>
                     <ul class="dropdown-menu">
@@ -47,61 +47,44 @@
                         } ?>
                     </ul>
                 </div>
-                <a href="prikazipredmete.php"><i class="bi bi-book me-2"></i>Predmeti</a>
+                <a href="prikazipredmete.php" class="active"><i class="bi bi-book me-2"></i>Predmeti</a>
                 <a href="#"><i class="bi bi-calendar-week me-2"></i>Raspored časova</a>
                 <a href="#"><i class="bi bi-bar-chart me-2"></i>Izostanci</a>
                 <a href="../logout.php"><i class="bi bi-person me-2"></i>Log out</a>
             </nav>
 
             <main class="col-md-10 content">
-                <div class="naziv-razreda">Lista profesora</div>
+                <div class="naziv-razreda">Lista predmeta</div>
                 
                 <div class="ucenici-grid mt-3">
                     <?php
                         error_reporting(E_ALL);
                         ini_set('display_errors', 1);
                         ini_set('display_startup_errors', 1);
+
+                        $qPredmeti = $conn->prepare('SELECT * FROM predmet');
+                        $qPredmeti->execute();
+                        $predmeti = $qPredmeti->fetchAll(PDO::FETCH_ASSOC);                        
                         
-                        $profesorQuery = $conn->prepare("SELECT * FROM `profesor` ORDER BY razred_id");
-                        $profesorQuery->execute();
-                        $profesori = $profesorQuery->fetchAll(PDO::FETCH_ASSOC);
-                        
-                        
-                        if(!empty($profesori)){
-                            foreach($profesori as $profesor)
+                        if(!empty($predmeti)){
+                            foreach($predmeti as $predmet)
                             {
                                 echo '
-                                <div class="kartica-ucenik">
+                                <div class="kartica-predmet" style="background-color:'.$predmet['boja'].'">
                                     <div class="ime-prezime-ucenik">
-                                    '.$profesor['ime_prezime'].' 
-                                </div>';
-                                echo '
-                                <div class="ime-prezime-ucenik">
-                                Razredništvo: ';
-                                $qRazrednik = $conn->prepare("SELECT * FROM razred r INNER JOIN profesor p ON p.razred_id = r.razred_id AND p.razred_id = :razred_id");
-                                $qRazrednik->bindParam(':razred_id', $profesor['razred_id']);
-                                $qRazrednik->execute();
-                                if($qRazrednik->rowCount() > 0)
-                                {
-                                    $razrednistvo = $qRazrednik->fetch(PDO::FETCH_ASSOC);
-                                    echo $razrednistvo['godina'].$razrednistvo['odjeljene'];
-                                }
-                                else
-                                {
-                                    echo 'Nema';
-                                }
-                                echo '</div>';
+                                    '.$predmet['predmet_id'].'. '.$predmet['ime_predmeta'].' 
+                                    </div>';
                                 echo '
                                 <div class="gumbi-ucenik">
-                                    <a class="gumb-izbrisi-ucenik" style="text-decoration: none;" href="obrisiprofesora.php?id='.$profesor['profesor_id'].'">Izbriši</a>
-                                    <a class="gumb-uredi-ucenik" style="text-decoration: none;" href="editprofesor.php?id='.$profesor['profesor_id'].'">Uredi</a>
+                                    <a class="gumb-izbrisi-ucenik" style="text-decoration: none;" href="obrisipredmet.php?id='.$predmet['predmet_id'].'">Izbriši</a>
+                                    <a class="gumb-uredi-ucenik" style="text-decoration: none;" href="editpredmet.php?id='.$predmet['predmet_id'].'">Uredi</a>
                                     </div>
                                 </div>';
                             }
                         }
                     ?>
-                    <div class="kartica-ucenik dodaj">
-                        <a href="dodajprofesora.php"class="dodaj">+</a>
+                    <div class="kartica-predmet dodaj">
+                        <a href="dodajpredmet.php"class="dodaj">+</a>
                     </div>
                 </div>
             </main>

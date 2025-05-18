@@ -141,6 +141,17 @@ body {
     text-decoration: none;
 }
 
+.kartica-predmet {
+    border: 1px solid #dee2e6;
+    border-radius: 0.2rem;
+    padding: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.05);
+    width: calc(33.33% - 20px); 
+    box-sizing: border-box; 
+    text-align: center;
+}
+
 @media (max-width: 992px) {
     .kartica-ucenik {
         width: calc(50% - 20px); 
