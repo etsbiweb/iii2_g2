@@ -22,7 +22,7 @@ $imePrezime = $qUcenik->fetchColumn();
                 <h5 class="px-3 fs-3 my-3">Dobrodošao/la, <?php echo $imePrezime; ?>!</h5>
                 <a href="dashboard.php" class="active"><i class="bi bi-house me-2"></i>Početna</a>
                 <a href="#"><i class="bi bi-book me-2"></i>Moji predmeti</a>
-                <a href="#"><i class="bi bi-calendar-week me-2"></i>Raspored časova</a>
+                <a href="mojraspored.php"><i class="bi bi-calendar-week me-2"></i>Raspored časova</a>
                 <a href="../logout.php"><i class="bi bi-person me-2"></i>Log out</a>
                 </div>
                 <main class = "col-md-10 content">

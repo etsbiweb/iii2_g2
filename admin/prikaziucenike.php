@@ -53,7 +53,7 @@ $qRaz = $qFindRaz->fetchAll(PDO::FETCH_ASSOC);
                 </ul>
             </div>
             <a href="prikazipredmete.php"><i class="bi bi-book me-2"></i>Predmeti</a>
-            <a href="#"><i class="bi bi-calendar-week me-2"></i>Raspored časova</a>
+            <a href="prikaziraspored.php"><i class="bi bi-calendar-week me-2"></i>Raspored časova</a>
             <a href="#"><i class="bi bi-bar-chart me-2"></i>Izostanci</a>
             <a href="../logout.php"><i class="bi bi-person me-2"></i>Log out</a>
         </nav>
