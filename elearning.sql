@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 18, 2025 at 02:05 PM
+-- Generation Time: May 23, 2025 at 07:37 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -30,12 +30,20 @@ SET time_zone = "+00:00";
 CREATE TABLE `cas` (
   `cas_id` int(11) NOT NULL,
   `razred_id` int(11) DEFAULT NULL,
-  `profesor_id` int(11) DEFAULT NULL,
-  `vrijeme_pocetka` time DEFAULT NULL,
-  `vrijeme_zavrsetka` time DEFAULT NULL,
   `redni_broj` enum('1','2','3','4','5','6','7') DEFAULT NULL,
-  `predmet_id` int(11) DEFAULT NULL
+  `smjena` enum('1','2') DEFAULT NULL,
+  `profesor_predmet_id` int(11) NOT NULL,
+  `dan` enum('Monday','Tuesday','Wednesday','Thursday','Friday') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `cas`
+--
+
+INSERT INTO `cas` (`cas_id`, `razred_id`, `redni_broj`, `smjena`, `profesor_predmet_id`, `dan`) VALUES
+(1, 1, '3', '1', 5, 'Monday'),
+(2, 1, '4', '1', 4, 'Wednesday'),
+(3, 10, '6', '1', 3, 'Tuesday');
 
 -- --------------------------------------------------------
 
@@ -122,7 +130,7 @@ CREATE TABLE `profesor` (
 --
 
 INSERT INTO `profesor` (`profesor_id`, `user_id`, `ime_prezime`, `razred_id`) VALUES
-(1, 4, 'Marko Bojanic', 2),
+(1, 4, 'Marko Bojanic', NULL),
 (2, 5, 'Aurelio Lacazette', 10),
 (3, 6, 'Pakora Bani', NULL),
 (4, 7, 'Marija Šerifović', NULL),
@@ -149,7 +157,8 @@ INSERT INTO `profesor_predmet` (`profesor_id`, `predmet_id`, `profesor_predmet_i
 (5, 1, 1),
 (5, 2, 2),
 (6, 1, 3),
-(6, 3, 4);
+(6, 3, 4),
+(1, 2, 5);
 
 -- --------------------------------------------------------
 
@@ -160,33 +169,34 @@ INSERT INTO `profesor_predmet` (`profesor_id`, `predmet_id`, `profesor_predmet_i
 CREATE TABLE `razred` (
   `razred_id` int(11) NOT NULL,
   `godina` enum('I','II','III','IV') DEFAULT NULL,
-  `odjeljene` enum('1','2','3','4','5') DEFAULT NULL
+  `odjeljene` enum('1','2','3','4','5') DEFAULT NULL,
+  `smjena` enum('1','2') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `razred`
 --
 
-INSERT INTO `razred` (`razred_id`, `godina`, `odjeljene`) VALUES
-(1, 'I', '1'),
-(2, 'I', '2'),
-(3, 'I', '3'),
-(4, 'I', '4'),
-(5, 'I', '5'),
-(6, 'II', '1'),
-(7, 'II', '2'),
-(8, 'II', '3'),
-(9, 'II', '4'),
-(10, 'II', '5'),
-(11, 'III', '1'),
-(12, 'III', '2'),
-(13, 'III', '3'),
-(14, 'III', '4'),
-(15, 'III', '5'),
-(16, 'IV', '1'),
-(17, 'IV', '2'),
-(18, 'IV', '3'),
-(19, 'IV', '4');
+INSERT INTO `razred` (`razred_id`, `godina`, `odjeljene`, `smjena`) VALUES
+(1, 'I', '1', '1'),
+(2, 'I', '2', '1'),
+(3, 'I', '3', '1'),
+(4, 'I', '4', '1'),
+(5, 'I', '5', '1'),
+(6, 'II', '1', '2'),
+(7, 'II', '2', '2'),
+(8, 'II', '3', '2'),
+(9, 'II', '4', '2'),
+(10, 'II', '5', '2'),
+(11, 'III', '1', '1'),
+(12, 'III', '2', '1'),
+(13, 'III', '3', '1'),
+(14, 'III', '4', '1'),
+(15, 'III', '5', '1'),
+(16, 'IV', '1', '2'),
+(17, 'IV', '2', '2'),
+(18, 'IV', '3', '2'),
+(19, 'IV', '4', '2');
 
 -- --------------------------------------------------------
 
@@ -253,8 +263,7 @@ INSERT INTO `users` (`user_id`, `email`, `password`, `pristup`, `token`) VALUES
 ALTER TABLE `cas`
   ADD PRIMARY KEY (`cas_id`),
   ADD KEY `razred_id` (`razred_id`),
-  ADD KEY `profesor_id` (`profesor_id`),
-  ADD KEY `cas_ibfk_2` (`predmet_id`);
+  ADD KEY `cas_ibfk_2` (`profesor_predmet_id`);
 
 --
 -- Indexes for table `izostanci`
@@ -327,7 +336,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cas`
 --
 ALTER TABLE `cas`
-  MODIFY `cas_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `cas_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `izostanci`
@@ -351,7 +360,7 @@ ALTER TABLE `password_resets`
 -- AUTO_INCREMENT for table `predmet`
 --
 ALTER TABLE `predmet`
-  MODIFY `predmet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `predmet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `profesor`
@@ -363,7 +372,7 @@ ALTER TABLE `profesor`
 -- AUTO_INCREMENT for table `profesor_predmet`
 --
 ALTER TABLE `profesor_predmet`
-  MODIFY `profesor_predmet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `profesor_predmet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `razred`
@@ -392,8 +401,7 @@ ALTER TABLE `users`
 --
 ALTER TABLE `cas`
   ADD CONSTRAINT `cas_ibfk_1` FOREIGN KEY (`razred_id`) REFERENCES `razred` (`razred_id`),
-  ADD CONSTRAINT `cas_ibfk_2` FOREIGN KEY (`predmet_id`) REFERENCES `predmet` (`predmet_id`),
-  ADD CONSTRAINT `cas_ibfk_3` FOREIGN KEY (`profesor_id`) REFERENCES `profesor` (`profesor_id`);
+  ADD CONSTRAINT `cas_ibfk_2` FOREIGN KEY (`profesor_predmet_id`) REFERENCES `profesor_predmet` (`profesor_predmet_id`);
 
 --
 -- Constraints for table `izostanci`

@@ -53,7 +53,6 @@
             
             foreach($odabraniPredmeti as $op)
             {
-                echo $op;
                 $qProfPred = $conn->prepare('INSERT INTO profesor_predmet (profesor_id, predmet_id) VALUES (:prof, :pred)');
                 $qProfPred->bindParam(':prof', $id);
                 $qProfPred->bindParam(':pred', $op);
@@ -68,7 +67,7 @@
             $_SESSION['delete_msg'] = '<div class="alert alert-success" role="alert">
             Profesor uspješno dodan
             </div>';
-            //header('Location: dashboard.php');
+            header('Location: dashboard.php');
         }
         else
         {
@@ -122,9 +121,30 @@
                     </ul>
                 </div>
                 <a href="prikazipredmete.php"><i class="bi bi-book me-2"></i>Predmeti</a>
+                <div class="dropdown-container">
                 <a href="#"><i class="bi bi-calendar-week me-2"></i>Raspored časova</a>
-                <a href="#"><i class="bi bi-bar-chart me-2"></i>Izostanci</a>
-                <a href="../logout.php"><i class="bi bi-person me-2"></i>Log out</a>
+                <ul class="dropdown-menu">
+                    <?php
+                    foreach ($razredi as $razred)
+                    { ?>
+                        <li class="has-submenu">
+                        <a href="#"><?php echo $razred['godina']; ?></a>
+                        <ul class="dropdown-submenu">
+                        <?php $odjeljenja = dohvatiOdjeljenja($conn, $razred); ?>       
+                        <?php
+                        foreach ($odjeljenja as $odjeljenje)
+                        { ?>
+                        <li><a href="prikaziraspored.php?id=<?php echo $odjeljenje['razred_id'];?>"><?php echo $odjeljenje['godina']; echo $odjeljenje['odjeljene']; ?></a></li>
+                        <?php 
+                        } ?>   
+                        </ul>
+                        </li>
+                    <?php 
+                    } ?>
+                </ul>
+            </div>
+            <a href="#"><i class="bi bi-bar-chart me-2"></i>Izostanci</a>
+            <a href="../logout.php"><i class="bi bi-person me-2"></i>Log out</a>
             </nav>
 
             <main class="col-md-10 content">
