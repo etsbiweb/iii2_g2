@@ -2,11 +2,6 @@
 require_once("../includes/dbh.php");
 require_once("../includes/profesor.php");
 require_once("../includes/profesorcheck.php");
-
-$qRazred = $conn->prepare("SELECT * FROM razred, profesor WHERE razred.razred_id = profesor.razred_id AND profesor.profesor_id = :id");
-$qRazred->bindParam(':id', $profesor['profesor_id']);
-$qRazred->execute();
-$razred = $qRazred->fetch(PDO::FETCH_ASSOC);
 ?>
 <!doctype html>
 <html lang="en">
@@ -17,7 +12,6 @@ $razred = $qRazred->fetch(PDO::FETCH_ASSOC);
         <link rel="stylesheet" href="../css/dashboard.css">
         <link rel="stylesheet" href="../css/kartica.css">
     </head>
-
     <body>
         <div class="container-fluid">
             <div class="row">
@@ -27,9 +21,9 @@ $razred = $qRazred->fetch(PDO::FETCH_ASSOC);
                 <div class="dropdown-container">
                     <a href="#"><i class="bi bi-book me-2"></i>Moj razred</a>
                     <ul class="dropdown-menu">
-                        <li class="dropdown-item"><a href="listaucenika.php?r=<?php echo $razred['razred_id'] ?>">Lista učenika</a></li>
-                        <li class="dropdown-item"><a href="rasporeducenika.php?r=<?php echo $razred['razred_id'] ?>">Raspored časova</a></li>
-                        <li class="dropdown-item"><a href="noviizostanci.php?r=<?php echo $razred['razred_id'] ?>">Novi izostanci</a></li>
+                        <li class="has-submenu"><a href="listaucenika.php?r=<?php echo $profesor['profesor_id'] ?>">Lista učenika</a></li>
+                        <li class="has-submenu"><a href="rasporeducenika.php?r=<?php echo $profesor['profesor_id'] ?>">Raspored časova</a></li>
+                        <li class="has-submenu"><a href="noviizostanci.php?r=<?php echo $profesor['profesor_id'] ?>">Novi izostanci</a></li>
                     </ul>
                 </div>
                 <a href="mojraspored.php"><i class="bi bi-calendar-week me-2"></i>Moj raspored</a>

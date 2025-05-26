@@ -9,6 +9,7 @@ $qFindRaz = $conn->prepare("SELECT godina, odjeljene FROM razred WHERE razred_id
 $qFindRaz->bindParam(":id", $id);
 $qFindRaz->execute();
 $r = $qFindRaz->fetch(PDO::FETCH_ASSOC);
+$br = 0;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -87,7 +88,7 @@ $r = $qFindRaz->fetch(PDO::FETCH_ASSOC);
                     ini_set('display_startup_errors', 1);
                     
                   
-                    $ucenikQuery = $conn->prepare("SELECT * FROM `ucenici` WHERE razred_id = :razred_id");
+                    $ucenikQuery = $conn->prepare("SELECT * FROM `ucenici` WHERE razred_id = :razred_id ORDER BY prezime, ime");
                     $ucenikQuery->bindParam(":razred_id", $id);
                     $ucenikQuery->execute();
                     $ucenici = $ucenikQuery->fetchAll(PDO::FETCH_ASSOC);
@@ -95,11 +96,12 @@ $r = $qFindRaz->fetch(PDO::FETCH_ASSOC);
                     if(!empty($ucenici)){
                         foreach($ucenici as $ucenik)
                         {
+                            $br++;
                             echo '
                                 <div class="kartica-ucenik">
                                     <div class="ime-prezime-ucenik">
-                                        '.$ucenik['ucenik_id'].' 
-                                        '.$ucenik['ime_prezime'].'<br>
+                                        '.$br.'.  
+                                        '.$ucenik['ime'].' '.$ucenik['prezime'].'<br>
                                         Opravdani: '.$ucenik['opravdani'].' <br>
                                         Neopravdani: '.$ucenik['neopravdani'].' <br>
                                     </div>

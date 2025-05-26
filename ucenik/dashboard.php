@@ -1,9 +1,6 @@
 <?php
 require_once("../includes/dbh.php");
-$qUcenik = $conn->prepare("SELECT ucenici.ime_prezime FROM ucenici, users WHERE ucenici.user_id = users.user_id AND users.user_id = :id");
-$qUcenik->bindParam(":id", $_SESSION['id']);
-$qUcenik->execute();
-$imePrezime = $qUcenik->fetchColumn();
+require_once("../includes/ucenik.php")
 ?>
 <!doctype html>
 <html lang="en">
@@ -19,7 +16,7 @@ $imePrezime = $qUcenik->fetchColumn();
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-2 sidebar">
-                <h5 class="px-3 fs-3 my-3">Dobrodošao/la, <?php echo $imePrezime; ?>!</h5>
+                <h5 class="px-3 fs-3 my-3">Dobrodošao/la, <?php echo $ucenik['ime'].' '.$ucenik['prezime']; ?>!</h5>
                 <a href="dashboard.php" class="active"><i class="bi bi-house me-2"></i>Početna</a>
                 <a href="#"><i class="bi bi-book me-2"></i>Moji predmeti</a>
                 <a href="mojraspored.php"><i class="bi bi-calendar-week me-2"></i>Raspored časova</a>

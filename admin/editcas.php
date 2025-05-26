@@ -2,51 +2,50 @@
 require_once("../includes/dbh.php");
 require_once("../includes/razredi.php");
 require_once("../includes/admincheck.php");
-$id = $_REQUEST['r'];
-$dan = $_REQUEST['dan'];
-$br = $_REQUEST['br'];
+
+$id = $_REQUEST['id'];
 
 $qProfPred = $conn->prepare('SELECT prof.ime_prezime, pred.ime_predmeta, pred.boja, pp.profesor_predmet_id FROM profesor_predmet pp
 INNER JOIN profesor prof ON pp.profesor_id = prof.profesor_id INNER JOIN predmet pred ON pp.predmet_id = pred.predmet_id');
 $qProfPred->execute();
 $profPred = $qProfPred->fetchAll(PDO::FETCH_ASSOC);
 
-$qRazred = $conn->prepare('SELECT * FROM razred WHERE razred_id = :id');
-$qRazred->bindParam(':id', $id);
-$qRazred->execute();
-$r = $qRazred->fetch(PDO::FETCH_ASSOC);
-if($r['godina'] == 'I' || $r['godina'] == 'III')
+$id = $_REQUEST['id'];
+$qFind = $conn->prepare('SELECT * FROM cas WHERE cas_id = :id');
+$qFind->bindParam(':id', $id);
+$qFind->execute();
+$cas = $qFind->fetchColumn();
+if($qFind->rowCount() == 0)
 {
-    $smjena = 1;
-}
-else
-{
-    $smjena = 2;
-}
-
-if(isset($_POST['submit']))
-{
-    $predmet = $_POST['predmet'];
-    $qProf = $conn->prepare('SELECT profesor.profesor_id FROM profesor, profesor_predmet
-    WHERE profesor.profesor_id = profesor_predmet.profesor_id AND profesor_predmet.profesor_predmet_id = :id');
-    $qProf->bindParam(':id', $predmet);
-    $qProf->execute();
-    $profesor = $qProf->fetchAll(PDO::FETCH_ASSOC);
-
-    $qDodaj = $conn->prepare('INSERT INTO `cas`(`razred_id`, `redni_broj`, `smjena`, `profesor_predmet_id`, `dan`) VALUES (:id, :br, :smjena, :predmet, :dan)');
-    $qDodaj->bindParam(':id', $id);
-    $qDodaj->bindParam(':br', $br);
-    $qDodaj->bindParam(':smjena', $smjena);
-    $qDodaj->bindParam(':predmet', $predmet);
-    $qDodaj->bindParam(':dan', $dan);
-    $qDodaj->execute();
-    $_SESSION['delete_msg'] = '<div class="alert alert-success" role="alert">
-    Čas uspješno kreiran 
+    $_SESSION['delete_msg'] = '<div class="alert alert-danger" role="alert">
+    Čas s tim ID-em ne postoji 
     </div>';
     header('Location: dashboard.php');
     exit();
 }
 
+
+if(isset($_POST['submit']))
+{
+    if($_POST['submit'] == "Spremi")
+    {
+        $predmet = $_POST['predmet'];
+        $qUpdate = $conn->prepare('UPDATE `cas` SET `profesor_predmet_id`=:predmet WHERE cas_id = :id');
+        $qUpdate->bindParam(':predmet', $predmet);
+        $qUpdate->bindParam(':id', $id);
+        $qUpdate->execute();
+        $_SESSION['delete_msg'] = '<div class="alert alert-success" role="alert">
+        Novi podaci su uspješno spremljeni
+        </div>';
+        header('Location: dashboard.php');
+        exit();
+    }
+    else if ($_POST['submit'] == "Obriši čas")
+    {
+        header('Location: obrisicas.php?id='.$id);
+        exit();
+    }
+}
 ?>
 
 
@@ -93,7 +92,7 @@ if(isset($_POST['submit']))
                 </div>
                 <a href="prikazipredmete.php"><i class="bi bi-book me-2"></i>Predmeti</a>
                 <div class="dropdown-container">
-                <a href="#"><i class="bi bi-calendar-week me-2"></i>Raspored časova</a>
+                <a href="#" class="active"><i class="bi bi-calendar-week me-2"></i>Raspored časova</a>
                 <ul class="dropdown-menu">
                     <?php
                     foreach ($razredi as $razred)
@@ -119,19 +118,20 @@ if(isset($_POST['submit']))
             </nav>
 
             <main class="col-md-10 content">
-                <h3 class="text-align-center">Kreiranje časa</h3>
+                <h3 class="text-align-center">Promjena časa</h3>
                 <form action="" method="post">
                     <div class="mt-3">
                         <label for="predmet">Predmet:</label>
                         <select name="predmet" id="predmet">
                         <?php foreach($profPred as $info)
-                        {
+                        {   
                             echo '<option value="'.$info['profesor_predmet_id'].'" style="background-color: '.$info['boja'].'">'.$info['ime_predmeta'].' - '.$info['ime_prezime'].'</option>';
                         } ?>
                         </select>
                     </div>
-                    <div class="mt-3">
-                        <input type="submit" name="submit" class="btn btn-primary" value="Spremi">
+                    <div class="mt-3 d-flex flex-row">
+                        <div class="mx-2"> <input type="submit" name="submit" class="btn btn-primary" value="Spremi"></div>
+                        <input type="submit" name="submit" class="btn btn-danger" value="Obriši čas">
                     </div>
                 </form>
                     </div>

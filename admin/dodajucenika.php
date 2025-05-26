@@ -12,11 +12,12 @@
     //$logs = new Log;
     $razred_id = $_REQUEST['id'];
     if(isset($_POST['submit'])){
-        $ime = $_POST['student_name'];
+        $ime = $_POST['ime'];
+        $prezime = $_POST['prezime'];
         $email = $_POST['student_email'];
         $jmbg = $_POST['student_jmbg'];
 
-        if(!empty($razred_id) && !empty($ime) && !empty($email) && !empty($jmbg)){
+        if(!empty($razred_id) && !empty($ime) && !empty($email) && !empty($jmbg) && (!empty($prezime))){
             $token = bin2hex(random_bytes(32));
             $queryUserInsert = $conn->prepare("INSERT INTO `users`(`email`, `pristup`, `token`) VALUES (:email,:pristup,:token)");
             $queryUserInsert->bindParam(":email",$email);
@@ -30,11 +31,13 @@
             $queryUserInsert->execute();
             $user_row = $queryUserInsert->fetch(PDO::FETCH_ASSOC);
 
-            $queryUcenikInsert = $conn->prepare("INSERT INTO `ucenici`(`user_id`, `ime_prezime`, `jmbg`, `razred_id`, `opravdani`, `neopravdani`) VALUES (:user_id,:ime,:jmbg,:razred_id,:opravdani,:neopravdani)");
+            $queryUcenikInsert = $conn->prepare("INSERT INTO `ucenici`(`user_id`, `ime`, `prezime`, `jmbg`, `razred_id`, `opravdani`, `neopravdani`)
+            VALUES (:user_id, :ime, :prezime, :jmbg, :razred_id, :opravdani, :neopravdani)");
 
             $izostanciDef = 0;
             $queryUcenikInsert->bindParam(":user_id",$user_row['user_id']);
             $queryUcenikInsert->bindParam(":ime",$ime);
+            $queryUcenikInsert->bindParam(":prezime",$prezime);
             $queryUcenikInsert->bindParam(":jmbg",$jmbg);
             $queryUcenikInsert->bindParam(":razred_id",$razred_id);
             $queryUcenikInsert->bindParam(":opravdani",$izostanciDef);
@@ -133,9 +136,15 @@
 
                 <h3 class="text-align-center">Dodaj ucenika</h3>
                 <form action="dodajucenika.php?id=<?php echo $razred_id; ?>" method="post">
-                    <div class="mt-3">
-                        <label for="student_name" class="form-label">Name: </label>
-                        <input type="text" name="student_name" id="student_name" class="form-control" placeholder="Full Name" required>
+                    <div class="d-flex flex-row gap-2">
+                        <div class="mt-3">
+                        <label for="ime" class="form-label">Ime: </label>
+                        <input type="text" name="ime" id="ime" class="form-control" placeholder="Ime" required>
+                        </div>
+                        <div class="mt-3">
+                        <label for="prezime" class="form-label">Prezime: </label>
+                        <input type="text" name="prezime" id="prezime" class="form-control" placeholder="Prezime" required>
+                        </div>
                     </div>
 
                     <div class="mt-3">
@@ -149,7 +158,7 @@
                     </div>
 
                     <div class="mt-3">
-                        <button type="submit" name="submit" id="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" name="submit" id="submit" class="btn btn-primary">Spremi</button>
                     </div>
                 </form>
             </main>

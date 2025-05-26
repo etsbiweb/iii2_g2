@@ -18,7 +18,7 @@ $qCasovi->bindParam(":id", $id);
 $qCasovi->execute();
 $casovi = $qCasovi->fetchAll(PDO::FETCH_ASSOC);
 
-function dohvatiPredmet($id, $conn)
+function prikaziCas($id, $conn)
 {
     $qPredmet = $conn->prepare("
         SELECT pred.ime_predmeta, pred.boja 
@@ -45,7 +45,7 @@ function dohvatiPredmet($id, $conn)
     if($profesor && $predmet)
     {
         echo '<div class="cell subject-cell" style="background-color:'.$predmet['boja'].'">
-        <a href="editcas.php?id='.$id.'">'.$predmet['ime_predmeta'].' - '.$profesor['ime_prezime'].'</a></div>';
+        <a href="editcas.php?id='.$id.'" class="cas">'.$predmet['ime_predmeta'].' - '.$profesor['ime_prezime'].'</a></div>';
     }
     else
     {
@@ -166,7 +166,7 @@ function dohvatiPredmet($id, $conn)
                     }
                     if($odabraniCas)
                     {
-                        dohvatiPredmet($odabraniCas['cas_id'], $conn);
+                        prikaziCas($odabraniCas['cas_id'], $conn);
                     }
                     if(!$odabraniCas)
                     {

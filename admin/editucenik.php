@@ -15,14 +15,16 @@
     
     if(isset($_POST['submit']))
     {
-        $ime = $_POST['student_name'];
+        $ime = $_POST['ime'];
+        $prezime = $_POST['prezime'];
         $email = $_POST['student_email'];
         $jmbg = $_POST['student_jmbg'];
 
-        if(!empty($ime) && !empty($email) && !empty($jmbg))
+        if(!empty($ime) && !empty($email) && !empty($jmbg) && !empty($prezime))
         {
-            $qUpdate = $conn->prepare('UPDATE `ucenici` SET `ime_prezime`= :ime,`jmbg`= :jmbg WHERE ucenici.ucenik_id = :id');
+            $qUpdate = $conn->prepare('UPDATE `ucenici` SET `ime`= :ime, `prezime`= :prezime, `jmbg`= :jmbg WHERE ucenici.ucenik_id = :id');
             $qUpdate->bindParam(':ime', $ime);
+            $qUpdate->bindParam(':prezime', $prezime);
             $qUpdate->bindParam(':jmbg', $jmbg);
             $qUpdate->bindParam(':id', $ucenik['ucenik_id']);
             $qUpdate->execute();
@@ -124,9 +126,15 @@
 
                 <h3 class="text-align-center">Dodaj ucenika</h3>
                 <form action="" method="post">
-                    <div class="mt-3">
-                        <label for="student_name" class="form-label">Name: </label>
-                        <input type="text" name="student_name" id="student_name" class="form-control" placeholder="Full Name" value="<?php echo $ucenik['ime_prezime'] ?>" required>
+                    <div class="d-flex flex-row gap-2">
+                        <div class="mt-3">
+                            <label for="ime" class="form-label">Ime: </label>
+                            <input type="text" name="ime" id="ime" class="form-control" placeholder="Ime" value="<?php echo $ucenik['ime'] ?>" required>
+                        </div>
+                        <div class="mt-3">
+                            <label for="prezime" class="form-label">Prezime: </label>
+                            <input type="text" name="prezime" id="prezime" class="form-control" placeholder="Prezime" value="<?php echo $ucenik['prezime'] ?>" required>
+                        </div>
                     </div>
 
                     <div class="mt-3">
