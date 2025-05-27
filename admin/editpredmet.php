@@ -106,7 +106,7 @@
                     } ?>
                 </ul>
             </div>
-            <a href="#"><i class="bi bi-bar-chart me-2"></i>Izostanci</a>
+            <a href="izostanci.php"><i class="bi bi-bar-chart me-2"></i>Izostanci</a>
             <a href="../logout.php"><i class="bi bi-person me-2"></i>Log out</a>
             </nav>
 

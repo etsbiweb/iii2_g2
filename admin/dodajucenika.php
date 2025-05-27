@@ -18,45 +18,60 @@
         $jmbg = $_POST['student_jmbg'];
 
         if(!empty($razred_id) && !empty($ime) && !empty($email) && !empty($jmbg) && (!empty($prezime))){
-            $token = bin2hex(random_bytes(32));
-            $queryUserInsert = $conn->prepare("INSERT INTO `users`(`email`, `pristup`, `token`) VALUES (:email,:pristup,:token)");
-            $queryUserInsert->bindParam(":email",$email);
-            $pristupUcenika="ucenik";
-            $queryUserInsert->bindParam(":pristup",$pristupUcenika);
-            $queryUserInsert->bindParam(":token",$token);
-            $queryUserInsert->execute();
+            $queryCheckEmail = $conn->prepare("SELECT COUNT(*) FROM users WHERE email = :email");
+            $queryCheckEmail->bindParam(":email", $email);
+            $queryCheckEmail->execute();
+            $emailExists = $queryCheckEmail->fetchColumn();
 
-            $queryUserInsert = $conn->prepare("SELECT user_id FROM `users` WHERE `token` = :token");
-            $queryUserInsert->bindParam(":token",$token);
-            $queryUserInsert->execute();
-            $user_row = $queryUserInsert->fetch(PDO::FETCH_ASSOC);
+            if ($emailExists > 0) {
+            $error_msg = "Unešeni email se već koristi.";
+            }
+            else
+            {
+                $token = bin2hex(random_bytes(32));
+                $queryUserInsert = $conn->prepare("INSERT INTO `users`(`email`, `pristup`, `token`) VALUES (:email,:pristup,:token)");
+                $queryUserInsert->bindParam(":email",$email);
+                $pristupUcenika="ucenik";
+                $queryUserInsert->bindParam(":pristup",$pristupUcenika);
+                $queryUserInsert->bindParam(":token",$token);
+                $queryUserInsert->execute();
 
-            $queryUcenikInsert = $conn->prepare("INSERT INTO `ucenici`(`user_id`, `ime`, `prezime`, `jmbg`, `razred_id`, `opravdani`, `neopravdani`)
-            VALUES (:user_id, :ime, :prezime, :jmbg, :razred_id, :opravdani, :neopravdani)");
+                $queryUserInsert = $conn->prepare("SELECT user_id FROM `users` WHERE `token` = :token");
+                $queryUserInsert->bindParam(":token",$token);
+                $queryUserInsert->execute();
+                $user_row = $queryUserInsert->fetch(PDO::FETCH_ASSOC);
 
-            $izostanciDef = 0;
-            $queryUcenikInsert->bindParam(":user_id",$user_row['user_id']);
-            $queryUcenikInsert->bindParam(":ime",$ime);
-            $queryUcenikInsert->bindParam(":prezime",$prezime);
-            $queryUcenikInsert->bindParam(":jmbg",$jmbg);
-            $queryUcenikInsert->bindParam(":razred_id",$razred_id);
-            $queryUcenikInsert->bindParam(":opravdani",$izostanciDef);
-            $queryUcenikInsert->bindParam(":neopravdani",$izostanciDef);
-            $queryUcenikInsert->execute();
+                $queryUcenikInsert = $conn->prepare("INSERT INTO `ucenici`(`user_id`, `ime`, `prezime`, `jmbg`, `razred_id`, `opravdani`, `neopravdani`)
+                VALUES (:user_id, :ime, :prezime, :jmbg, :razred_id, :opravdani, :neopravdani)");
 
-            $email_class = new Mail();
+                $izostanciDef = 0;
+                $queryUcenikInsert->bindParam(":user_id",$user_row['user_id']);
+                $queryUcenikInsert->bindParam(":ime",$ime);
+                $queryUcenikInsert->bindParam(":prezime",$prezime);
+                $queryUcenikInsert->bindParam(":jmbg",$jmbg);
+                $queryUcenikInsert->bindParam(":razred_id",$razred_id);
+                $queryUcenikInsert->bindParam(":opravdani",$izostanciDef);
+                $queryUcenikInsert->bindParam(":neopravdani",$izostanciDef);
+                $queryUcenikInsert->execute();
 
-            $user_message = 'Click this link to verify your profile, enter your desired password and confirm it then you can log in to the our site.
-                http://localhost/iii2_g2/verify-password.php?token='.$token.'
-            
-            ';
-            $email_class->SendMail($email,'elearning@gmail.com','Verify Profile',$user_message);
+                $email_class = new Mail();
 
-            $razred = $conn->prepare("SELECT CONCAT(`godina`,' ',`odjeljene`) AS raz FROM `razred` WHERE `razred_id` = :class_id");
-            $razred->bindParam(":class_id",$razred_id);
-           // $logs->newLog("Dodan novi ucenik ".$ime." u razred ".$razred['raz']."");
+                $user_message = 'Click this link to verify your profile, enter your desired password and confirm it then you can log in to the our site.
+                    http://localhost/iii2_g2/verify-password.php?token='.$token.'
+                
+                ';
+                $email_class->SendMail($email,'elearning@gmail.com','Verify Profile',$user_message);
+
+                $razred = $conn->prepare("SELECT CONCAT(`godina`,' ',`odjeljene`) AS raz FROM `razred` WHERE `razred_id` = :class_id");
+                $razred->bindParam(":class_id",$razred_id);
+            // $logs->newLog("Dodan novi ucenik ".$ime." u razred ".$razred['raz']."");
+                $_SESSION['delete_msg']='<div class="alert alert-success" role="alert">
+                Učenik uspješno dodan!
+                </div>';
+                header('Location: dashboard.php');
+                exit();
+            }
         }
-
     }
 ?>
 
@@ -135,6 +150,11 @@
             <main class="col-md-10 content">
 
                 <h3 class="text-align-center">Dodaj ucenika</h3>
+                <?php if (!empty($error_msg)) { ?>
+                    <div class="alert alert-danger" role="alert">
+                        <?php echo $error_msg; ?>
+                    </div>
+                <?php } ?>
                 <form action="dodajucenika.php?id=<?php echo $razred_id; ?>" method="post">
                     <div class="d-flex flex-row gap-2">
                         <div class="mt-3">

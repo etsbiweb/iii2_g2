@@ -11,9 +11,13 @@ $qProfesori = $conn->prepare("SELECT count(*) FROM profesor;");
 $qProfesori->execute();
 $profesori = $qProfesori->fetchColumn();
 
-$qIzostanci = $conn->prepare("SELECT count(*) FROM izostanci WHERE MONTH(vrijeme) = MONTH(CURDATE())");
-$qIzostanci->execute();
-$izostanci = $qIzostanci->fetchColumn();
+$qIzostanciMj = $conn->prepare("SELECT count(*) FROM izostanci WHERE MONTH(vrijeme) = MONTH(CURDATE())");
+$qIzostanciMj->execute();
+$izostanciMj = $qIzostanciMj->fetchColumn();
+
+$qIzostanciDan = $conn->prepare("SELECT * FROM izostanci WHERE date(vrijeme) = CURRENT_DATE");
+$qIzostanciDan->execute();
+$izostanciDan = $qIzostanciDan->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -81,7 +85,7 @@ $izostanci = $qIzostanci->fetchColumn();
                     } ?>
                 </ul>
             </div>
-            <a href="#"><i class="bi bi-bar-chart me-2"></i>Izostanci</a>
+            <a href="izostanci.php"><i class="bi bi-bar-chart me-2"></i>Izostanci</a>
             <a href="../logout.php"><i class="bi bi-person me-2"></i>Log out</a>
         </nav>
 
@@ -106,7 +110,7 @@ $izostanci = $qIzostanci->fetchColumn();
                     <div class="card text-center p-3">
                         <i class="bi bi-exclamation-triangle card-icon mb-2"></i>
                         <h6>Izostanci ovaj mjesec</h6>
-                        <h3><?php echo $izostanci; ?></h3>
+                        <h3><?php echo $izostanciMj; ?></h3>
                     </div>
                 </div>
             </div>
@@ -140,13 +144,18 @@ $izostanci = $qIzostanci->fetchColumn();
 
                 <div class="col-md-6">
                     <div class="card p-3">
-                        <h5 class="mb-3">Raspored za danas</h5>
+                        <h5 class="mb-3">Izostanci danas</h5>
                         <ul class="list-unstyled mb-0">
-                            <li>08:00 – 08:45 <strong>Matematika V–1</strong></li>
-                            <li>08:55 – 09:40 <strong>Engleski jezik IV–3</strong></li>
-                            <li>09:50 – 10:35 <strong>Hemija III–2</strong></li>
-                            <li>10:45 – 11:30 <strong>Istorija VII–4</strong></li>
-                            <li>11:40 – 12:25 <strong>Fizika VI–1</strong></li>
+                            <?php foreach ($izostanciDan as $iz)
+                            {
+                                $qSelectUcenik = $conn->prepare("SELECT * FROM ucenici INNER JOIN izostanci iz ON iz.ucenik_id = ucenici.ucenik_id
+                                WHERE iz.izostanak_id = :id");
+                                $qSelectUcenik->bindParam(':id', $iz['izostanak_id']);
+                                $qSelectUcenik->execute();
+                                $ucenik = $qSelectUcenik->fetch(PDO::FETCH_ASSOC);
+                                echo '<li>'.$ucenik["ime"].' '.$ucenik["prezime"].'
+                                 - <strong>'.date('H:i:s', strtotime($iz['vrijeme'])).'</strong> Profesor: '.$iz['ime_profesora'].'</li>';
+                            }?>
                         </ul>
                     </div>
                 </div>

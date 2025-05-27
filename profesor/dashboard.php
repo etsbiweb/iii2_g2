@@ -2,11 +2,39 @@
 require_once("../includes/dbh.php");
 require_once("../includes/profesor.php");
 require_once("../includes/profesorcheck.php");
-
 $qRazred = $conn->prepare("SELECT * FROM razred, profesor WHERE razred.razred_id = profesor.razred_id AND profesor.profesor_id = :id");
 $qRazred->bindParam(':id', $profesor['profesor_id']);
 $qRazred->execute();
-$razred = $qRazred->fetch(PDO::FETCH_ASSOC);
+if($qRazred->rowCount() > 0) 
+{
+    $razred = $qRazred->fetch(PDO::FETCH_ASSOC);
+}
+$qBrojCasova = $conn->prepare("SELECT COUNT(*) FROM cas
+INNER JOIN profesor_predmet pp ON pp.profesor_predmet_id = cas.profesor_predmet_id
+INNER JOIN profesor prof ON pp.profesor_id = prof.profesor_id WHERE prof.profesor_id = :id");
+$qBrojCasova->bindParam(":id", $profesor['profesor_id']);
+$qBrojCasova->execute();
+$brojCasova = $qBrojCasova->fetchColumn();
+
+$qBrojUcenika = $conn->prepare('SELECT COUNT(*) FROM ucenici
+INNER JOIN razred ON razred.razred_id = ucenici.razred_id WHERE razred.razred_id = :id');
+$qBrojUcenika->bindParam(':id', $razred['razred_id']);
+$qBrojUcenika->execute();
+$brojUcenika = $qBrojUcenika->fetchColumn();
+
+$qBrojSvihIzostanaka = $conn->prepare('SELECT COUNT(*) FROM izostanci
+INNER JOIN ucenici ON ucenici.ucenik_id = izostanci.ucenik_id
+INNER JOIN razred ON razred.razred_id = ucenici.razred_id WHERE razred.razred_id = :id');
+$qBrojSvihIzostanaka->bindParam(':id', $razred['razred_id']);
+$qBrojSvihIzostanaka->execute();
+$brojSvihIzostanaka = $qBrojSvihIzostanaka->fetchColumn();
+
+$qIzostanciDanas = $conn->prepare('SELECT * FROM izostanci
+INNER JOIN ucenici ON ucenici.ucenik_id = izostanci.ucenik_id
+INNER JOIN razred ON razred.razred_id = ucenici.razred_id WHERE razred.razred_id = :id AND date(izostanci.vrijeme) = CURRENT_DATE');
+$qIzostanciDanas->bindParam(':id', $razred['razred_id']);
+$qIzostanciDanas->execute();
+$izostanciDan = $qIzostanciDanas->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!doctype html>
 <html lang="en">
@@ -27,23 +55,74 @@ $razred = $qRazred->fetch(PDO::FETCH_ASSOC);
                 <div class="dropdown-container">
                     <a href="#"><i class="bi bi-book me-2"></i>Moj razred</a>
                     <ul class="dropdown-menu">
-                        <li class="dropdown-item"><a href="listaucenika.php?r=<?php echo $razred['razred_id'] ?>">Lista učenika</a></li>
-                        <li class="dropdown-item"><a href="rasporeducenika.php?r=<?php echo $razred['razred_id'] ?>">Raspored časova</a></li>
-                        <li class="dropdown-item"><a href="noviizostanci.php?r=<?php echo $razred['razred_id'] ?>">Novi izostanci</a></li>
+                        <li class="has-submenu"><a href="listaucenika.php">Lista učenika</a></li>
+                        <li class="has-submenu"><a href="rasporeducenika.php">Raspored časova</a></li>
+                        <li class="has-submenu"><a href="noviizostanci.php">Novi izostanci</a></li>
                     </ul>
                 </div>
                 <a href="mojraspored.php"><i class="bi bi-calendar-week me-2"></i>Moj raspored</a>
                 <a href="../logout.php"><i class="bi bi-person me-2"></i>Log out</a>
                 </nav>
                 <main class="col-md-10 content">
-                <?php 
-                    if(isset($_SESSION["access_error"]))
-                    {
+                    <?php if(isset($_SESSION["access_error"]))
+                        {
                         echo $_SESSION['access_error'];
-                        unset( $_SESSION['access_error'] ); 
-                    }
-                ?>
-                </main>
+                        unset( $_SESSION['access_error'] );
+                        }?>
+                    <h2 class="mb-4">Početna</h2>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                        <div class="card text-center p-3">
+                            <i class="bi bi-mortarboard card-icon mb-2"></i>
+                            <h6>Časova danas</h6>
+                            <h3><?php echo $brojCasova;?></h3>
+                        </div>
+                        </div>
+                        <div class="col-md-4">
+                        <div class="card text-center p-3">
+                            <i class="bi bi-person-circle card-icon mb-2"></i>
+                            <h6>Broj učenika u Vašem razredu</h6>
+                            <h3><?php echo $brojUcenika;?></h3>
+                        </div>
+                        </div>
+                        <div class="col-md-4">
+                        <div class="card text-center p-3">
+                            <i class="bi bi-exclamation-triangle card-icon mb-2"></i>
+                            <h6>Ukupan broj izostanaka u Vašem razredu</h6>
+                            <h3><?php echo $brojSvihIzostanaka;?></h3>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                        <div class="card p-3">
+                            <h5 class="mb-3">Nedavne aktivnosti</h5>
+                            <ul class="mb-0">
+                            <li>Nema aktivnosti</li>
+                            </ul>
+                        </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card p-3">
+                                <h5 class="mb-3">Izostanci danas</h5>
+                                <ul class="list-unstyled mb-0">
+                                    <?php foreach ($izostanciDan as $iz)
+                                    {
+                                        $qSelectUcenik = $conn->prepare("SELECT * FROM ucenici INNER JOIN izostanci iz ON iz.ucenik_id = ucenici.ucenik_id
+                                        WHERE iz.izostanak_id = :id");
+                                        $qSelectUcenik->bindParam(':id', $iz['izostanak_id']);
+                                        $qSelectUcenik->execute();
+                                        $ucenik = $qSelectUcenik->fetch(PDO::FETCH_ASSOC);
+                                        echo '<li>'.$ucenik["ime"].' '.$ucenik["prezime"].'
+                                        - <strong>'.date('H:i:s', strtotime($iz['vrijeme'])).'</strong> Upisao: '.$iz['ime_profesora'].'</li>';
+                                    }?>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    </main>
             </div>
         </div>
         <footer>

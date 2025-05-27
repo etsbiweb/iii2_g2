@@ -13,6 +13,9 @@
     $qPredmeti->execute();
     $predmeti = $qPredmeti->fetchAll(PDO::FETCH_ASSOC);
 
+    $qIzostanci = $conn->prepare('SELECT * FROM izostanci');
+    $qIzostanci->execute();
+    $izostanci = $qIzostanci->fetchAll(PDO::FETCH_ASSOC);
 
     if(isset($_POST['submit']))
     {
@@ -156,56 +159,39 @@
                     } ?>
                 </ul>
             </div>
-            <a href="izostanci.php"><i class="bi bi-bar-chart me-2"></i>Izostanci</a>
+            <a href="izostanci.php" class="active"><i class="bi bi-bar-chart me-2"></i>Izostanci</a>
             <a href="../logout.php"><i class="bi bi-person me-2"></i>Log out</a>
             </nav>
 
             <main class="col-md-10 content">
-                <h3 class="text-align-center">Dodavanje profesora</h3>
-                <?php if (!empty($error_msg)) { ?>
-                    <div class="alert alert-danger" role="alert">
-                        <?php echo $error_msg; ?>
-                    </div>
-                <?php } ?>
-                <form action="" method="post">
-                    <div class="mt-3">
-                        <label for="profesor_ime" class="form-label">Ime i Prezime: <?php //echo $odjeljenja['razred_id'];?></label>
-                        <input type="text" name="profesor_ime" id="profesor_ime" class="form-control" placeholder="Ime i Prezime" required>
-                    </div>
-                    <div class="mt-3">
-                        <label for="profesor_email" class="form-label">Email:</label>
-                        <input type="email" name="profesor_email" id="profesor_email" class="form-control" placeholder="Email" required>
-                    </div>
-                    <div class="mt-3">
-                        <label for="razrednistvo" class="form-label">Razredništvo:</label>
-                        <select name="razrednistvo" id="razrednistvo">
-                            <option value="" selected>Nema</option>
-                            <?php
-                            foreach ($razredi as $razred)
+                <h3 class="text-align-center">Svi izostanci</h3>
+                <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Ime i prezime učenika</th>
+                                <th class="text-center">Ime i prezime profesora</th>
+                                <th class="text-center">Datum</th>
+                                <th class="text-center">Vrijeme</th>
+                                <th class="text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach($izostanci as $izostanak)
                             {
-                                $odjeljenja = dohvatiOdjeljenja($conn, $razred);
-                                foreach ($odjeljenja as $odjeljenje)
-                                {
-                                    echo '<option value="'.$odjeljenje['razred_id'].'">'.$razred['godina'].$odjeljenje['odjeljene'].'</option>';
-                                }
-                            }
-                            ?>
-                        </select>
-                        </div>
-                        <div class="mt-3">
-                        <label for="predmeti">Predmeti:</label>
-                        </div>
-                        <div class="mt-3">
-                            <select name="opredmeti[]" id="opredmeti" multiple>
-                                <?php foreach ($predmeti as $predmet)
-                                {
-                                    echo '<option value="'.$predmet['predmet_id'].'">'.$predmet['ime_predmeta'].'</option>';
-                                } ?>
-                            </select>
-                        </div>
-                        <div class="mt-3">
-                            <button type="submit" class="btn btn-primary" name="submit" id="submit">Submit</button>
-                        </div>
+                                $qUcenik = $conn->prepare('SELECT * FROM ucenici, izostanci WHERE ucenici.ucenik_id = izostanci.ucenik_id AND izostanci. izostanak_id = :id');
+                                $qUcenik->bindParam(':id', $izostanak['izostanak_id']);
+                                $qUcenik->execute();
+                                $ucenik = $qUcenik->fetch(PDO::FETCH_ASSOC);
+                                echo '<tr>';
+                                echo '<td class="text-center">'.$ucenik['ime'].' '.$ucenik['prezime'].'</td>';
+                                echo '<td class="text-center">'.$izostanak['ime_profesora'].'</td>';
+                                echo '<td class="text-center">'.date('d. m. Y.', strtotime($izostanak['vrijeme'])).'</td>';
+                                echo '<td class="text-center">'.date('H:i:s', strtotime($izostanak['vrijeme'])).'</td>';
+                                echo '<td class="text-center">'.$izostanak['status_izostanka'].'</td>
+                            </tr>';
+                            }?>
+                        </tbody>
+                    </table>
                     </form>
                     <?php if(isset($message)): echo $message; endif; ?>
                 </main>

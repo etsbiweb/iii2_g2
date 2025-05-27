@@ -63,7 +63,14 @@ function prikaziCas($id, $conn)
         <nav class="col-md-2 sidebar">
             <h5 class="px-3 fs-3 my-3">Dobrodošli, <?php if($qProf->rowCount()>0): echo $profesor['ime_prezime']; endif; ?>!</h5>
             <a href="dashboard.php"><i class="bi bi-house me-2"></i>Početna</a>
-            <a href="#"><i class="bi bi-book me-2"></i>Moj razred</a>
+            <div class="dropdown-container">
+                    <a href="#"><i class="bi bi-book me-2"></i>Moj razred</a>
+                    <ul class="dropdown-menu">
+                        <li class="has-submenu"><a href="listaucenika.php">Lista učenika</a></li>
+                        <li class="has-submenu"><a href="rasporeducenika.php">Raspored časova</a></li>
+                        <li class="has-submenu"><a href="noviizostanci.php">Novi izostanci</a></li>
+                    </ul>
+                </div>
             <a href="mojraspored.php" class="active"><i class="bi bi-calendar-week me-2"></i>Moj raspored</a>
             <a href="../logout.php"><i class="bi bi-person me-2"></i>Log out</a>    
         </nav>

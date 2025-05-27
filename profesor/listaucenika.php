@@ -2,6 +2,13 @@
 require_once("../includes/dbh.php");
 require_once("../includes/profesor.php");
 require_once("../includes/profesorcheck.php");
+require_once("../includes/razrednistvo.php");
+
+$qUcenici = $conn->prepare("SELECT * FROM ucenici WHERE razred_id = :id");
+$qUcenici->bindParam(":id", $razred['razred_id']);
+$qUcenici->execute();
+$ucenici = $qUcenici->fetchAll(PDO::FETCH_ASSOC);
+$br = 0;
 ?>
 <!doctype html>
 <html lang="en">
@@ -17,13 +24,13 @@ require_once("../includes/profesorcheck.php");
             <div class="row">
                 <nav class="col-md-2 sidebar">
                 <h5 class="px-3 fs-3 my-3">Dobrodošli, <?php if($qProf->rowCount()>0): echo $profesor['ime_prezime']; endif; ?>!</h5>
-                <a href="dashboard.php"class="active"><i class="bi bi-house me-2"></i>Početna</a>
+                <a href="dashboard.php"><i class="bi bi-house me-2"></i>Početna</a>
                 <div class="dropdown-container">
-                    <a href="#"><i class="bi bi-book me-2"></i>Moj razred</a>
+                    <a href="#" class="active"><i class="bi bi-book me-2"></i>Moj razred</a>
                     <ul class="dropdown-menu">
-                        <li class="has-submenu"><a href="listaucenika.php?r=<?php echo $profesor['profesor_id'] ?>">Lista učenika</a></li>
-                        <li class="has-submenu"><a href="rasporeducenika.php?r=<?php echo $profesor['profesor_id'] ?>">Raspored časova</a></li>
-                        <li class="has-submenu"><a href="noviizostanci.php?r=<?php echo $profesor['profesor_id'] ?>">Novi izostanci</a></li>
+                        <li class="has-submenu"><a href="listaucenika.php">Lista učenika</a></li>
+                        <li class="has-submenu"><a href="rasporeducenika.php">Raspored časova</a></li>
+                        <li class="has-submenu"><a href="noviizostanci.php">Novi izostanci</a></li>
                     </ul>
                 </div>
                 <a href="mojraspored.php"><i class="bi bi-calendar-week me-2"></i>Moj raspored</a>
@@ -37,6 +44,31 @@ require_once("../includes/profesorcheck.php");
                         unset( $_SESSION['access_error'] ); 
                     }
                 ?>
+                <div class="naziv-razreda">Vaš razred</div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width: 5.21vh" class="text-center">Br.</th>
+                                <th class="text-center">Ime i prezime učenika</th>
+                                <th class="text-center">Opravdani</th>
+                                <th class="text-center">Neopravdani</th>
+                                <th class="text-center">Ukupno izostanaka</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach($ucenici as $ucenik)
+                            {
+                                echo '<tr>';
+                                $br ++;
+                                echo '<td style:"width: 5.21vh" class="text-center">'.$br.'</td>';
+                                echo '<td class="text-center">'.$ucenik['ime'].' '.$ucenik['prezime'].'</td>';
+                                echo '<td class="text-center">'.$ucenik['opravdani'].'</td>';
+                                echo '<td class="text-center">'.$ucenik['neopravdani'].'</td>';
+                                echo '<td class="text-center">'.$ucenik['neopravdani']+$ucenik['opravdani'].'</td>
+                            </tr>';
+                            }?>
+                        </tbody>
+                    </table>
                 </main>
             </div>
         </div>

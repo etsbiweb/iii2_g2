@@ -31,8 +31,25 @@ if(isset($_POST['submit']))
     WHERE profesor.profesor_id = profesor_predmet.profesor_id AND profesor_predmet.profesor_predmet_id = :id');
     $qProf->bindParam(':id', $predmet);
     $qProf->execute();
-    $profesor = $qProf->fetchAll(PDO::FETCH_ASSOC);
+    $profesor = $qProf->fetchColumn();
 
+    $qZauzet = $conn->prepare('SELECT cas.redni_broj, cas.dan FROM profesor prof
+    INNER JOIN profesor_predmet pp ON pp.profesor_id = prof.profesor_id
+    INNER JOIN cas ON pp.profesor_predmet_id = cas.profesor_predmet_id WHERE prof.profesor_id = :id');
+    $qZauzet->bindParam(':id', $profesor);
+    $qZauzet->execute();
+    $zauzet = $qZauzet->fetchAll(PDO::FETCH_ASSOC);
+    foreach($zauzet as $z)
+    {
+        if($z['dan']  == $dan && $z['redni_broj'] == $br)
+        {
+            $_SESSION['delete_msg'] = '<div class="alert alert-danger" role="alert">
+            Profesor je zauzet u to vrijeme!
+            </div>';
+            header('Location: dashboard.php');
+            exit();
+        }
+    }
     $qDodaj = $conn->prepare('INSERT INTO `cas`(`razred_id`, `redni_broj`, `smjena`, `profesor_predmet_id`, `dan`) VALUES (:id, :br, :smjena, :predmet, :dan)');
     $qDodaj->bindParam(':id', $id);
     $qDodaj->bindParam(':br', $br);
@@ -114,7 +131,7 @@ if(isset($_POST['submit']))
                     } ?>
                 </ul>
             </div>
-                <a href="#"><i class="bi bi-bar-chart me-2"></i>Izostanci</a>
+                <a href="izostanci.php"><i class="bi bi-bar-chart me-2"></i>Izostanci</a>
                 <a href="../logout.php"><i class="bi bi-person me-2"></i>Log out</a>
             </nav>
 
