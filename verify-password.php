@@ -49,7 +49,7 @@ if (isset($_POST['submit'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/verify-password.css">
     <title>Reset Password</title>
 </head>
 <body>
@@ -59,15 +59,10 @@ if (isset($_POST['submit'])) {
                 <a href="https://etsbi.edu.ba/" class="icon" target="_blank">
                     <img src="imgs/dwa.png" alt="ETSBI" class="custom-icon">
                 </a>
-                <h1>Enter password!</h1>
-                <div class="social-icons">
-                    <a href="https://etsbi.edu.ba/" class="icon" target="_blank"><i class="fa-solid fa-graduation-cap"></i></a>
-                    <a href="https://www.facebook.com/etsbi.bihac/?locale=hr_HR" class="icon" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="https://www.instagram.com/etsbi_/" class="icon" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-                </div>
+                <h1>Unesite lozinku</h1>
                 <?php if (isset($message)) { echo "<p>$message</p>"; } ?>
                 <input type="password" name="password" id="password" placeholder="Password">
-                <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
+                <input type="password" name="confirm_password" id="confirm_password" placeholder="Potvrdite lozinku">
                 <button type="submit" name="submit" id="submit">Reset Password</button>
             </form>
         </div>
@@ -75,8 +70,8 @@ if (isset($_POST['submit'])) {
         <div class="toggle-container">
             <div class="toggle">
                 <div class="toggle-panel toggle-right">
-                    <h1>Hello, Friend!</h1>
-                    <p>Enter your desired password!</p>
+                    <h1>Verifikacija lozinke</h1>
+                    <p>Unesite svoju željenu lozinku</p>
                 </div>
             </div>
         </div>

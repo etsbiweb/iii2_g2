@@ -46,7 +46,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/forgot-password.css">
     <title>forgot-password</title>
 </head>
 <body>
@@ -56,23 +56,18 @@
                 <a href="https://etsbi.edu.ba/" class="icon" target="_blank">
                     <img src="imgs/dwa.png" alt="ETSBI" class="custom-icon">
                 </a>
-                <h1>Forgot Password</h1>
-                <div class="social-icons">
-                    <a href="https://etsbi.edu.ba/" class="icon" target="_blank"><i class="fa-solid fa-graduation-cap"></i></a>
-                    <a href="https://www.facebook.com/etsbi.bihac/?locale=hr_HR" class="icon" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="https://www.instagram.com/etsbi_/" class="icon" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-                </div>
-                <span>or enter your email</span>
+                <h1>Zaboravljena lozinka</h1>
+                <span>Unesite svoju email adresu</span>
                 <input type="email" name="email" id="email" placeholder="Email">
-                <button type="submit" name="submit" id="submit">Send</button>
+                <button type="submit" name="submit" id="submit">Spremi</button>
             </form>
         </div>
     
         <div class="toggle-container">
             <div class="toggle">
                 <div class="toggle-panel toggle-right">
-                    <h1>Hello, Friend!</h1>
-                    <p>Enter your email and we will send you a link to reset your password!</p>
+                    <h1>Zaboravljena lozinka</h1>
+                    <p>Kako bi resetovali svoju lozinku, potrebno je unijeti email adresu.</p>
                 </div>
             </div>
         </div>
