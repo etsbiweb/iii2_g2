@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 26, 2025 at 06:36 PM
+-- Generation Time: May 27, 2025 at 06:53 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -36,16 +36,6 @@ CREATE TABLE `cas` (
   `dan` enum('Monday','Tuesday','Wednesday','Thursday','Friday') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `cas`
---
-
-INSERT INTO `cas` (`cas_id`, `razred_id`, `redni_broj`, `smjena`, `profesor_predmet_id`, `dan`) VALUES
-(2, 1, '4', '1', 4, 'Wednesday'),
-(3, 10, '6', '1', 3, 'Tuesday'),
-(4, 13, '5', '1', 2, 'Monday'),
-(12, 1, '4', '1', 10, 'Thursday');
-
 -- --------------------------------------------------------
 
 --
@@ -61,16 +51,6 @@ CREATE TABLE `izostanci` (
   `redni_broj_casa` enum('1','2','3','4','5','6','7') DEFAULT NULL,
   `ime_profesora` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `izostanci`
---
-
-INSERT INTO `izostanci` (`izostanak_id`, `ucenik_id`, `status_izostanka`, `vrijeme`, `ime_predmeta`, `redni_broj_casa`, `ime_profesora`) VALUES
-(6, 4, NULL, '2025-05-01 13:13:19', NULL, NULL, NULL),
-(7, 5, NULL, '2025-05-26 13:13:44', NULL, NULL, NULL),
-(22, 5, NULL, '2025-05-01 15:14:34', 'Baze Podataka', '3', 'Marko Bojanic'),
-(23, 4, NULL, '2025-05-01 15:14:34', 'Baze Podataka', '3', 'Marko Bojanic');
 
 -- --------------------------------------------------------
 
@@ -109,17 +89,6 @@ CREATE TABLE `predmet` (
   `boja` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `predmet`
---
-
-INSERT INTO `predmet` (`predmet_id`, `ime_predmeta`, `boja`) VALUES
-(1, 'Matematika', '#c3fafe'),
-(2, 'Web Programiranje', '#c7fbc6'),
-(3, 'Baze Podataka', '#f5adff'),
-(4, 'Bosanski Jezik', '#fef7a9'),
-(5, 'Titovim Stazama Revolucije', '#ffa8a8');
-
 -- --------------------------------------------------------
 
 --
@@ -133,18 +102,6 @@ CREATE TABLE `profesor` (
   `razred_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `profesor`
---
-
-INSERT INTO `profesor` (`profesor_id`, `user_id`, `ime_prezime`, `razred_id`) VALUES
-(2, 5, 'Aurelio Lacazette', NULL),
-(4, 7, 'Marija Šerifović', 4),
-(5, 9, 'aa', NULL),
-(6, 10, 'a', NULL),
-(7, 11, 'sadsd', 3),
-(8, 12, 'Marko Bojanic', NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -156,21 +113,6 @@ CREATE TABLE `profesor_predmet` (
   `predmet_id` int(11) DEFAULT NULL,
   `profesor_predmet_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `profesor_predmet`
---
-
-INSERT INTO `profesor_predmet` (`profesor_id`, `predmet_id`, `profesor_predmet_id`) VALUES
-(5, 1, 1),
-(5, 2, 2),
-(6, 1, 3),
-(6, 3, 4),
-(4, 4, 6),
-(2, 1, 7),
-(2, 2, 8),
-(7, 1, 9),
-(8, 3, 10);
 
 -- --------------------------------------------------------
 
@@ -227,14 +169,6 @@ CREATE TABLE `ucenici` (
   `prezime` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `ucenici`
---
-
-INSERT INTO `ucenici` (`ucenik_id`, `user_id`, `jmbg`, `razred_id`, `opravdani`, `neopravdani`, `ime`, `prezime`) VALUES
-(4, 13, 123123, 1, 0, 0, 'Emir', 'Jusic'),
-(5, 14, 123123, 1, 0, 0, 'Admir', 'Caferovic');
-
 -- --------------------------------------------------------
 
 --
@@ -254,15 +188,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `email`, `password`, `pristup`, `token`) VALUES
-(1, 'sender.americanfood@gmail.com', '$2y$10$12TN0MSZK/yWhDf.sbXl/urTI0ZqctPLGhJpC6P4MBUwhgtxPOiZe', 'admin', NULL),
-(5, 'vmi77894@toaik.com', NULL, 'profesor', '44fdc772cd50deecf7c2ab5ad23a3c78e11a59da3b2ab2091265036dba22b83c'),
-(7, 'vfdtnhawizrxgidkin@nesopf.com', NULL, 'profesor', '820981d995d48d3681d716d3fd4737540d2c85b32eb787f937a41f65599eb1fc'),
-(9, 'awtawt@awfawrf.com', NULL, 'profesor', 'b56d37024e3a7ed5c3b31b3d1a125182b9eb62bd64b4633f5851e6d55f6946e6'),
-(10, 'awrwatrawtg@awrar.com', NULL, 'profesor', '6ad113bceb269e03c5911799382af014e5712589b85bcf02fb9081f81d1a6027'),
-(11, 'wdawd@awda.com', NULL, 'profesor', '73fbebc8e59e63a9c6ffc64c5a4590fa0469758f90928eb18dd933754c4e1ad8'),
-(12, 'ecamyyzsozqlrbwvlf@nespf.com', '$2y$10$eURwb3fABtWrNY/f6V7ml.VByOfAms/q/OnTqeiUvO6cNX8eG1mHa', 'profesor', NULL),
-(13, 'ibtphfxynkumerteqr@xfavaj.com', '$2y$10$ALOYK.SbzsUKyyCOItJ5He/MJvMCd5mgg8MlR3M7bVRulqpn7ePnW', 'ucenik', NULL),
-(14, 'dnp65770@toaik.com', NULL, 'ucenik', '966509374eb3cbcff0821bde8fb2fa99ceb094b638cca1fe87f74942f48c6457');
+(1, 'sender.americanfood@gmail.com', '$2y$10$12TN0MSZK/yWhDf.sbXl/urTI0ZqctPLGhJpC6P4MBUwhgtxPOiZe', 'admin', NULL);
 
 --
 -- Indexes for dumped tables
@@ -346,13 +272,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cas`
 --
 ALTER TABLE `cas`
-  MODIFY `cas_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `cas_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT for table `izostanci`
 --
 ALTER TABLE `izostanci`
-  MODIFY `izostanak_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `izostanak_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT for table `log`
@@ -364,25 +290,25 @@ ALTER TABLE `log`
 -- AUTO_INCREMENT for table `password_resets`
 --
 ALTER TABLE `password_resets`
-  MODIFY `reset_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `reset_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT for table `predmet`
 --
 ALTER TABLE `predmet`
-  MODIFY `predmet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `predmet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT for table `profesor`
 --
 ALTER TABLE `profesor`
-  MODIFY `profesor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `profesor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT for table `profesor_predmet`
 --
 ALTER TABLE `profesor_predmet`
-  MODIFY `profesor_predmet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `profesor_predmet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT for table `razred`
@@ -394,13 +320,13 @@ ALTER TABLE `razred`
 -- AUTO_INCREMENT for table `ucenici`
 --
 ALTER TABLE `ucenici`
-  MODIFY `ucenik_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ucenik_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
