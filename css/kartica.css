@@ -1,165 +1,88 @@
-body {
-    background-color: #f8f9fa;
+.card {
+    background-color: var(--card-bg);
+    color: var(--text-light);
+    border: none;
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 8px 20px var(--shadow-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
-.sidebar {
-    height: 100vh;
-    background: linear-gradient(to bottom, rgb(14, 25, 130), rgb(34, 46, 128), rgb(45, 58, 128));
-    color: white;
-    padding-top: 1rem;
-}
-
-.sidebar a {
-    color: white;
-    text-decoration: none;
-    padding: 0.75rem 1rem;
-    display: block;
-    border-radius: 0.375rem;
-}
-
-.sidebar a.active, .sidebar a:hover {
-    background-color: rgb(31, 51, 163);
-}
-
-.content {
-    padding: 2rem;
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(0, 123, 255, 0.3);
 }
 
 .card-icon {
-    font-size: 2rem;
+    font-size: 3.5em;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+    filter: drop-shadow(0 0 5px rgba(0, 123, 255, 0.5));
 }
 
-.dropdown-container {
-    position: relative;
+.card h6 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1em;
+    color: #bbbbbb;
+    margin-bottom: 0.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.dropdown-menu {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 0;
-    background-color: white;
-    border: 1px solid #ccc;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    border-radius: 0.375rem;
-    transform: translateX(35px);
+.card h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.8em;
+    font-weight: 700;
+    color: var(--text-light);
+    line-height: 1;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.3);
 }
 
-.dropdown-container:hover .dropdown-menu {
-    display: block;
-    background: linear-gradient(to bottom, rgb(14, 25, 130), rgb(34, 46, 128), rgb(45, 58, 128));
-}
-
-.dropdown-menu a {
-    color: #ffffff;
-    padding: 0.75rem 1rem;
-    display: block;
-    text-decoration: none;
+.card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
     text-align: left;
-    border-radius: 0.375rem;
+    width: 100%;
 }
 
-.dropdown-menu a:hover {
-    background-color: rgb(31, 51, 163);
-}
-
-.ucenici-grid {
+.card ul li {
+    background-color: #333333;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 5px;
     display: flex;
-    flex-wrap: wrap;
-    gap: 20px; 
-    justify-content: flex-start; 
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    font-size: 1em;
+    color: #e0e0e0;
 }
 
-.kartica-ucenik {
-    background-color: #ebebeb;
-    border: 1px solid #dee2e6;
-    border-radius: 0.2rem;
-    padding: 15px;
-    margin-bottom: 10px;
-    box-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.05);
-    width: calc(33.33% - 20px); 
-    box-sizing: border-box; 
+.card ul li:last-child {
+    margin-bottom: 0;
+}
+
+.card ul li:hover {
+    background-color: #444444;
+    transform: translateX(3px);
+}
+
+.card ul li strong {
+    color: var(--accent-primary);
+    font-weight: 700;
+}
+
+.alert {
+    margin-top: 1.5rem;
+    border-radius: 8px;
+    font-weight: 700;
     text-align: center;
-}
-
-.ime-prezime-ucenik {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-}
-
-.gumbi-ucenik {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-}
-
-.gumb-izbrisi-ucenik {
-    background-color: rgb(153, 5, 5);
-    color: white;
-    border: none;
-    border-radius: 0.2rem;
-    padding: 8px 12px;
-    cursor: pointer;
-    font-size: 0.8rem;
-    transition: 0.25s ease all;
-}
-
-.gumb-uredi-ucenik {
-    background-color: #0062ca;
-    color: white;
-    border: none;
-    border-radius: 0.2rem;
-    padding: 8px 12px;
-    cursor: pointer;
-    font-size: 0.8rem;
-    transition: 0.25s ease all;
-}
-
-.gumb-izbrisi-ucenik:hover {
-    background-color: #701b23;
-}
-
-.gumb-uredi-ucenik:hover {
-    background-color: #044e9e;
-}
-
-.naziv-razreda {
-    text-align: center;
-    font-size: 4rem; 
-    font-weight: bold; 
-    margin-bottom: 20px; 
-    color: #333;
-}
-
-
-
-.dodaj{
-    font-size: 6rem;
-    background-color: rgb(226, 253, 226);
-    color: rgb(0, 94, 0);
-    text-decoration: none;
-}
-
-.kartica-predmet {
-    border: 1px solid #dee2e6;
-    border-radius: 0.2rem;
-    padding: 15px;
-    margin-bottom: 10px;
-    box-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.05);
-    width: calc(33.33% - 20px); 
-    box-sizing: border-box; 
-    text-align: center;
-}
-
-@media (max-width: 992px) {
-    .kartica-ucenik {
-        width: calc(50% - 20px); 
-    }
-}
-
-@media (max-width: 768px) {
-    .kartica-ucenik {
-        width: 100%; 
-    }
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }

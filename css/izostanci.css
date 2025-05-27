@@ -1,0 +1,94 @@
+/* --- Stilovi za glavni sadržaj (main.content) specifični za izostanci.php --- */
+.content {
+    background-color: var(--primary-bg);
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.content h3 {
+    color: var(--accent-primary);
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 700;
+}
+
+/* --- Stilovi za tabelu izostanaka --- */
+.table {
+    background-color: var(--card-bg);
+    color: var(--text-light);
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.table thead {
+    background-color: var(--accent-primary);
+    color: white;
+}
+
+.table th, .table td {
+    padding: 12px 15px;
+    vertical-align: middle;
+    border-color: var(--border-color);
+}
+
+.table th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+.table-bordered th,
+.table-bordered td {
+    border: 1px solid var(--border-color);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #333333;
+}
+
+.table-dark {
+    --bs-table-bg: var(--card-bg);
+    --bs-table-striped-bg: #333333;
+    --bs-table-striped-color: var(--text-light);
+    --bs-table-active-bg: rgba(255, 255, 255, 0.1);
+    --bs-table-hover-bg: rgba(255, 255, 255, 0.05);
+    --bs-table-border-color: var(--border-color);
+    --bs-table-color: var(--text-light);
+}
+
+.alert {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.alert-success {
+    background-color: #28a745;
+    color: white;
+    border-color: #218838;
+}
+
+.alert-danger {
+    background-color: #dc3545;
+    color: white;
+    border-color: #c82333;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    .content {
+        padding: 15px;
+    }
+    .table th, .table td {
+        padding: 8px 10px;
+        font-size: 0.9em;
+    }
+}

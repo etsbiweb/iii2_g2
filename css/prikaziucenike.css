@@ -1,0 +1,212 @@
+.naziv-razreda {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--primary-accent);
+    margin-bottom: 2.5rem;
+    font-weight: 700;
+    text-shadow: 1px 1px 8px rgba(98, 0, 238, 0.2);
+    font-size: 2.8rem;
+    text-align: center;
+    padding-top: 1rem;
+    animation: slideInFromLeft 0.6s ease-out;
+}
+
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.ucenici-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.8rem;
+    padding-bottom: 3rem;
+}
+
+.kartica-ucenik {
+    background-color: var(--card-bg);
+    color: var(--text-light);
+    border: none;
+    border-radius: 14px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 8px 25px var(--shadow-medium);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.kartica-ucenik:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 16px 35px rgba(98, 0, 238, 0.4);
+    background-color: #2e2e2e;
+}
+
+.ime-prezime-ucenik {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.6em;
+    font-weight: 700;
+    color: var(--primary-accent);
+    margin-bottom: 1rem;
+    text-align: center;
+    width: 100%;
+    line-height: 1.3;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}
+
+.ime-prezime-ucenik br + br + br {
+    display: block;
+    margin-top: 0.5rem;
+}
+
+.ime-prezime-ucenik .broj-izostanaka {
+    font-size: 0.9em;
+    color: #b0b0b0;
+    font-weight: 400;
+}
+
+.gumbi-ucenik {
+    margin-top: auto;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+}
+
+.gumb-izbrisi-ucenik, .gumb-uredi-ucenik {
+    flex-grow: 1;
+    padding: 0.8rem 1.2rem;
+    border-radius: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease, color 0.3s ease;
+    text-decoration: none;
+    font-size: 0.95em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gumb-izbrisi-ucenik {
+    background-color: #ef4444;
+    color: white;
+    border: 1px solid #ef4444;
+}
+.gumb-izbrisi-ucenik:hover {
+    background-color: #dc2626;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+.gumb-uredi-ucenik {
+    background-color: var(--primary-accent);
+    color: white;
+    border: 1px solid var(--primary-accent);
+}
+.gumb-uredi-ucenik:hover {
+    background-color: #7c3aed;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(98, 0, 238, 0.4);
+}
+
+.kartica-ucenik.dodaj {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    border: 3px dashed rgba(255, 255, 255, 0.2);
+    background-color: transparent;
+    transition: all 0.3s ease;
+    box-shadow: none;
+}
+.kartica-ucenik.dodaj:hover {
+    background-color: rgba(98, 0, 238, 0.08);
+    border-color: var(--primary-accent);
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(98, 0, 238, 0.2);
+}
+
+.kartica-ucenik.dodaj .dodaj {
+    font-size: 5em;
+    color: var(--primary-accent);
+    text-decoration: none;
+    transition: transform 0.3s ease, color 0.3s ease;
+    line-height: 1;
+    display: block;
+}
+
+.kartica-ucenik.dodaj .dodaj:hover {
+    transform: scale(1.25) rotate(5deg);
+    color: var(--secondary-accent);
+}
+
+@media (max-width: 992px) {
+    .ucenici-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 1.5rem;
+    }
+    .naziv-razreda {
+        font-size: 2.4rem;
+        margin-bottom: 2rem;
+    }
+    .kartica-ucenik {
+        padding: 1.5rem;
+        border-radius: 12px;
+    }
+    .ime-prezime-ucenik {
+        font-size: 1.4em;
+        margin-bottom: 0.8rem;
+    }
+    .gumb-izbrisi-ucenik, .gumb-uredi-ucenik {
+        padding: 0.7rem 1rem;
+        font-size: 0.9em;
+        border-radius: 8px;
+    }
+    .kartica-ucenik.dodaj .dodaj {
+        font-size: 4em;
+    }
+}
+
+@media (max-width: 768px) {
+    main.content {
+        margin-left: 0;
+        padding: 1.5rem;
+    }
+    .naziv-razreda {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+    .ucenici-grid {
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
+    }
+    .kartica-ucenik {
+        padding: 1.2rem;
+    }
+    .ime-prezime-ucenik {
+        font-size: 1.3em;
+    }
+    .gumbi-ucenik {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .gumb-izbrisi-ucenik, .gumb-uredi-ucenik {
+        width: 100%;
+        padding: 0.8rem;
+        font-size: 0.9em;
+    }
+    .kartica-ucenik.dodaj .dodaj {
+        font-size: 3.5em;
+    }
+}

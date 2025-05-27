@@ -1,0 +1,247 @@
+.naziv-razreda {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--primary-accent);
+    margin-bottom: 2.5rem;
+    font-weight: 700;
+    text-shadow: 1px 1px 8px rgba(98, 0, 238, 0.2);
+    font-size: 2.8rem;
+    text-align: center;
+    padding-top: 1rem;
+    animation: slideInFromLeft 0.6s ease-out;
+}
+
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.ucenici-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.8rem;
+    padding-bottom: 3rem;
+}
+
+.kartica-predmet {
+    color: white;
+    border: none;
+    border-radius: 18px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background-clip: padding-box;
+}
+
+.kartica-predmet::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: inherit;
+    pointer-events: none;
+    transition: background 0.3s ease;
+    z-index: 0;
+}
+
+.kartica-predmet:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 16px 40px rgba(98, 0, 238, 0.4);
+    filter: brightness(1.15);
+    border-color: var(--primary-accent);
+}
+
+.kartica-predmet:hover::before {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.kartica-predmet .ime-prezime-ucenik {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.8em;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    width: 100%;
+    line-height: 1.3;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+.kartica-predmet .gumbi-ucenik {
+    margin-top: auto;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+    z-index: 1;
+}
+
+.kartica-predmet .gumb-izbrisi-ucenik, 
+.kartica-predmet .gumb-uredi-ucenik {
+    flex-grow: 1;
+    padding: 0.8rem 1.2rem;
+    border-radius: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    text-decoration: none;
+    font-size: 0.95em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+.kartica-predmet .gumb-izbrisi-ucenik:hover {
+    background-color: #dc2626;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
+    border-color: #dc2626;
+}
+
+.kartica-predmet .gumb-uredi-ucenik:hover {
+    background-color: var(--primary-accent);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(98, 0, 238, 0.5);
+    border-color: var(--primary-accent);
+}
+
+.kartica-predmet.dodaj {
+    background-color: transparent !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    border: 3px dashed rgba(255, 255, 255, 0.25);
+    transition: all 0.3s ease;
+    box-shadow: none;
+    cursor: pointer;
+}
+
+.kartica-predmet.dodaj::before {
+    content: none;
+}
+
+.kartica-predmet.dodaj:hover {
+    background-color: rgba(98, 0, 238, 0.08) !important;
+    border-color: var(--primary-accent);
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(98, 0, 238, 0.2);
+    filter: none;
+}
+
+.kartica-predmet.dodaj .dodaj {
+    font-size: 5em;
+    font-weight: 600;
+    color: var(--primary-accent);
+    text-decoration: none;
+    transition: transform 0.3s ease, color 0.3s ease;
+    line-height: 1;
+    display: block;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    backdrop-filter: none;
+    text-shadow: none;
+    width: auto;
+    height: auto;
+    border-radius: 0;
+}
+
+.kartica-predmet.dodaj .dodaj:hover {
+    transform: scale(1.25) rotate(5deg);
+    color: var(--secondary-accent);
+    background-color: transparent;
+    box-shadow: none;
+}
+
+@media (max-width: 992px) {
+    .ucenici-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 1.5rem;
+    }
+    .naziv-razreda {
+        font-size: 2.4rem;
+        margin-bottom: 2rem;
+    }
+    .kartica-predmet {
+        padding: 1.5rem;
+        border-radius: 15px;
+    }
+    .kartica-predmet .ime-prezime-ucenik {
+        font-size: 1.6em;
+        margin-bottom: 1rem;
+    }
+    .kartica-predmet .gumb-izbrisi-ucenik, 
+    .kartica-predmet .gumb-uredi-ucenik {
+        padding: 0.7rem 1rem;
+        font-size: 0.9em;
+        border-radius: 8px;
+    }
+    .kartica-predmet.dodaj .dodaj {
+        font-size: 4em;
+    }
+}
+
+@media (max-width: 768px) {
+    main.content {
+        margin-left: 0;
+        padding: 1.5rem;
+    }
+    .naziv-razreda {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+    .ucenici-grid {
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
+    }
+    .kartica-predmet {
+        padding: 1.2rem;
+        border-radius: 12px;
+    }
+    .kartica-predmet .ime-prezime-ucenik {
+        font-size: 1.4em;
+    }
+    .kartica-predmet .gumbi-ucenik {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .kartica-predmet .gumb-izbrisi-ucenik, 
+    .kartica-predmet .gumb-uredi-ucenik {
+        width: 100%;
+        padding: 0.8rem;
+        font-size: 0.9em;
+    }
+    .kartica-predmet.dodaj .dodaj {
+        font-size: 3.5em;
+    }
+}

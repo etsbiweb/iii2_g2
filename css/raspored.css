@@ -1,114 +1,412 @@
-.main-wrapper {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
+/* Osnovne varijable za boje - ako ih ne koristiš, zamijeni ih konkretnim vrijednostima */
+:root {
+    --sidebar-bg: #222222; /* Tamnija pozadina za sidebar i main-wrapper */
+    --shadow-color: rgba(0, 0, 0, 0.4); /* Boja sjene */
+    --accent-primary: #007bff; /* Primarna akcentna boja (plava) */
+    --text-light: #f0f0f0; /* Svijetli tekst */
+    --card-bg: #333333; /* Pozadina za kartice/ćelije rasporeda */
+    --text-dark: #333333; /* Tamniji tekst, ako je potrebno */
+}
+
+/* Stilovi za tijelo i općenite elemente */
+body {
+    font-family: Arial, sans-serif; /* Standardni font */
+    background-color: #1a1a1a; /* Jako tamna pozadina cijelog bodyja */
+    color: var(--text-light); /* Boja teksta */
     margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Sprečava horizontalno scrollanje */
+}
+
+/* Stilovi za glavni kontejner */
+.container-fluid {
+    padding: 0;
+}
+
+.row {
+    margin: 0; /* Uklanja margine koje Bootstrap može dodati */
+}
+
+/* Stilovi za bočnu navigaciju (sidebar) */
+.sidebar {
+    background-color: var(--sidebar-bg);
+    color: var(--text-light);
+    height: 100vh; /* Visina cijelog viewporta */
+    padding-top: 20px;
+    position: fixed; /* Fiksirana pozicija */
+    left: 0;
+    top: 0;
+    box-shadow: 2px 0 10px var(--shadow-color);
+    z-index: 1000;
+}
+
+.sidebar h5 {
+    color: var(--text-light);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.sidebar a {
+    color: var(--text-light);
+    text-decoration: none;
+    display: block;
+    padding: 10px 20px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    background-color: var(--accent-primary);
+    color: #ffffff;
+}
+
+.sidebar a i {
+    margin-right: 10px;
+}
+
+/* Stilovi za padajuće menije u sidebaru */
+.dropdown-container {
+    margin-bottom: 5px;
+}
+
+.dropdown-container .dropdown-toggle {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    color: var(--text-light);
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+}
+
+.dropdown-container .dropdown-toggle:hover {
+    background-color: var(--accent-primary);
+    color: #ffffff;
+}
+
+.dropdown-container .dropdown-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: #2b2b2b; /* Tamnija pozadina za podmeni */
+    border-radius: 5px;
+    overflow: hidden; /* Skriva overflow sadržaja */
+    margin-left: 20px; /* Uvlačenje podmenija */
+    margin-top: 5px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.dropdown-container .dropdown-menu .has-submenu a {
+    padding: 8px 30px; /* Više paddinga za uvlačenje */
+    color: var(--text-light);
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-container .dropdown-menu .has-submenu a:hover {
+    background-color: #3a3a3a; /* Tamnija pozadina pri hoveru */
+}
+
+/* Stilovi za pod-podmenije (ako ih imaš, npr. za godine) */
+.dropdown-submenu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: #3a3a3a; /* Još tamnija pozadina za pod-podmeni */
+    margin-left: 10px; /* Dodatno uvlačenje */
+    margin-top: 5px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.dropdown-submenu li a {
+    padding: 6px 40px; /* Još više paddinga za uvlačenje */
+}
+
+/* Glavni sadržaj (main) */
+.content {
+    margin-left: 16.66666667%; /* Offset za 2 kolone Bootstrapa (col-md-2) */
     padding: 20px;
-    width: 100%;
-    box-sizing: border-box;
+    background-color: #1a1a1a; /* Pozadina glavnog sadržaja */
+    min-height: 100vh;
 }
 
+/* Stilovi za glavni wrapper rasporeda */
+.main-wrapper {
+    background-color: var(--sidebar-bg); /* Koristi istu boju kao sidebar */
+    border-radius: 10px;
+    box-shadow: 0 5px 20px var(--shadow-color);
+    padding: 2rem;
+    margin-top: 1.5rem;
+    overflow-x: auto; /* Omogućava horizontalno scrollanje za male ekrane */
+}
+
+/* Stilovi za naslov razreda */
+.naziv-razreda {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.2em;
+    font-weight: 700;
+    color: var(--accent-primary);
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding-top: 1rem;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+/* Stilovi za kontejner rasporeda (grid) */
 .raspored-container {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #ccc;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-width: 1100px;
-    width: 100%;
+    display: grid;
+    grid-template-columns: 80px repeat(5, 1fr); /* 80px za labelu sata, 5 jednako raspoređenih kolona za dane */
+    gap: 1px; /* Razmak između ćelija */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    overflow: hidden; /* Osigurava da se border-radius primijeni na cijeli kontejner */
 }
 
-.header-row,
-.row-content {
-    display: flex;
-    flex-shrink: 0;
+.header-row {
+    display: contents; /* Osigurava da se djeca ponašaju kao direktna grid djeca */
 }
 
+/* Opći stilovi za ćelije grida */
 .cell {
+    background-color: #2b2b2b; /* Tamnija pozadina za ćelije */
+    padding: 1rem 0.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 15px 10px;
-    border: 1px solid #eee;
-    box-sizing: border-box;
-    height: 40px;
+    font-size: 0.95em;
+    color: var(--text-light);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Suptilna granica između redova */
+    border-right: 1px solid rgba(255, 255, 255, 0.05); /* Suptilna granica između kolona */
 }
 
-.corner-cell,
+.cell:last-child {
+    border-right: none; /* Uklanja desnu granicu za zadnju kolonu */
+}
+.row-content:last-child .cell {
+    border-bottom: none; /* Uklanja donju granicu za zadnji red */
+}
+
+/* Stilovi za labelu sata (1. čas, 2. čas...) */
 .hour-label {
-    flex-basis: 120px;
-    flex-grow: 0;
+    background-color: #3a3a3a; /* Još tamnija pozadina */
+    font-weight: 600;
+    color: var(--accent-primary); /* Akcentna boja za sat */
+    position: sticky; /* Fiksira sat pri scrollanju */
+    left: 0;
+    z-index: 2; /* Osigurava da je iznad drugih ćelija pri scrollanju */
+    border-right: 1px solid rgba(255, 255, 255, 0.1); /* Jaca granica desno */
 }
 
-.day-header,
+/* Stilovi za zaglavlje dana (Ponedjeljak, Utorak...) */
+.day-header {
+    background-color: #4a4a4a; /* Tamnija pozadina */
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #f0f0f0;
+    font-family: 'Montserrat', sans-serif;
+    border-bottom: 2px solid var(--accent-primary); /* Jača granica ispod */
+}
+
+/* Stilovi za ćelije predmeta */
 .subject-cell {
-    font-size: 1.5vh;
-    flex-basis: calc((100% - 120px) / 5);
-    flex-grow: 1;
-    text-decoration: none;
+    background-color: var(--card-bg); /* Pozadina kartice/ćelije */
+    color: var(--text-light);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    min-height: 80px; /* Minimalna visina ćelije */
+    overflow: hidden;
+    position: relative; /* Bitno za z-index djeteta (linka) */
 }
 
-.corner-cell {
-    background-color: #f9f9f9;
-    font-weight: bold;
+.subject-cell:hover {
+    transform: translateY(-2px); /* Lagani pomak prema gore pri hoveru */
+    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.2); /* Sjena pri hoveru */
 }
 
-.day-header,
-.hour-label {
-    background-color: #e0e0e0;
-    font-weight: bold;
-}
-
-.subject-cell {
-    background-color: #fff;
-}
-
-.cell + .cell {
-    border-left: none;
-}
-
-.header-row .cell { 
-    border-bottom: none;
-}
-
-.header-row .cell:first-child { 
-    border-bottom: none; 
-}
-
-.row-content .cell:first-child {
-    border-left: 1px solid #eee; 
-}
-
-.smjena-container {
-    background-color: rgba(51, 123, 231, 0.76);
+.subject-cell .cas {
+    display: block; /* Osigurava da link zauzima cijelu ćeliju */
     width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: inherit; /* Nasljeđuje boju teksta od parenta */
     display: flex;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
+    padding: 0.5rem;
+    word-wrap: break-word; /* Prelamanje dugih riječi */
+    white-space: normal; /* Normalan razmak između riječi */
+    position: relative; /* Omogućava z-index */
+    z-index: 2147483647; /* Osigurava da je link iznad bilo čega drugog u ćeliji */
+    /* Ako i dalje ne radi, probaj z-index: 1000; ili !important; (privremeno za testiranje) */
 }
 
-.smjena-item {
+/* Stilovi za "dodaj čas" ćeliju - ako je koristiš */
+.subject-cell.dodaj-cas {
+    background-color: #333333;
+    color: #999999;
+    border: 2px dashed rgba(255, 255, 255, 0.2); /* Isprekidana granica */
+}
+
+.subject-cell.dodaj-cas:hover {
+    background-color: #444444;
+    color: var(--accent-primary);
+    border-color: var(--accent-primary);
+    transform: none; /* Uklanja transformaciju s hovera za dodaj-cas */
+    box-shadow: none; /* Uklanja sjenu s hovera za dodaj-cas */
+}
+
+.subject-cell.dodaj-cas a {
+    font-size: 2.5em;
+    font-weight: 300;
+    text-decoration: none;
+    color: inherit;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.row-content {
+    display: contents; /* Omogućava da se djeca (ćelije) ponašaju kao direktna grid djeca */
+}
+
+/* AŽURIRANI CSS ZA SMJENA-CONTAINER */
+.raspored-container .smjena-container {
+    grid-column: 1 / -1; /* KLJUČNO: Proteže se od prve do zadnje kolone u gridu */
+    
+    background-color: var(--accent-primary); /* Primarna akcentna boja */
+    color: #fff; /* Bijeli tekst za bolji kontrast */
     text-align: center;
-    font-weight: bold;
-    font-size: 2vh;
+    padding: 0.8rem 1rem;
+    margin-top: 1rem; /* Razmak iznad ako želiš */
+    margin-bottom: 1rem; /* Razmak ispod ako želiš */
+    border-radius: 8px; /* Zaobljeni rubovi, da se podudara s main-wrapperom */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 1.4em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex; /* Koristimo flexbox za centriranje teksta unutar */
     justify-content: center;
     align-items: center;
-    height: 3vh;
+    min-height: 50px; /* Minimalna visina kontejnera */
+    
+    /* Uklanjamo bordere i margine koje bi `.cell` klasa inače dodala,
+       jer smo je uklonili iz HTML-a i želimo potpuni kontrolu ovdje. */
+    border: none; 
+    margin-left: 0;
+    margin-right: 0;
+    width: auto; /* Osiguraj da zauzima svu dostupnu širinu dodijeljenu od grida */
+
+    /* Dodatno: osiguraj da smjena-container ne nasljeđuje display:contents od row-content */
+    /* To smo riješili micanjem row-content diva oko smjena-container, pa ovo ne bi trebalo biti potrebno */
 }
 
-.dodaj-cas
-{
-    font-size: 2.5vh;
-    background-color: rgb(226, 253, 226);
-    color: rgb(0, 94, 0);
-    text-decoration: none;
+
+/* RESPONZIVNI DIZAJN */
+
+/* Za ekrane manje od 768px (npr. tableti u portretnom modu) */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: static; /* Više nije fiksiran, scrolla se s ostatkom sadržaja */
+        box-shadow: none;
+        padding-bottom: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .content {
+        margin-left: 0; /* Uklanja offset jer sidebar više nije fiksiran */
+        padding-top: 20px;
+    }
+
+    .main-wrapper {
+        padding: 1rem;
+    }
+
+    .naziv-razreda {
+        font-size: 1.8em;
+    }
+
+    .raspored-container {
+        grid-template-columns: 60px repeat(5, 1fr); /* Smanjuje širinu labela sata */
+        overflow-x: auto; /* Scroll bar ako je širina tablice veća od ekrana */
+    }
+
+    .cell {
+        padding: 0.8rem 0.3rem;
+        font-size: 0.8em;
+    }
+
+    .hour-label {
+        font-size: 0.9em;
+        position: sticky; /* Ostaje sticky */
+        left: 0;
+        background-color: #3a3a3a;
+        z-index: 2;
+    }
+
+    .day-header {
+        font-size: 0.9em;
+    }
+
+    .subject-cell {
+        min-height: 60px; /* Smanjuje minimalnu visinu ćelije */
+    }
+
+    .subject-cell .cas {
+        font-size: 0.9em;
+    }
+
+    .subject-cell.dodaj-cas a {
+        font-size: 2em;
+    }
+
+    .raspored-container .smjena-container { /* Specifično za .raspored-container .smjena-container */
+        font-size: 1.2em;
+        padding: 0.6rem 0.8rem;
+        min-height: 40px;
+    }
 }
 
-.cas
-{
-    color:black;
-    text-decoration: none;
+/* Za ekrane manje od 480px (npr. mobiteli) */
+@media (max-width: 480px) {
+    .raspored-container {
+        grid-template-columns: 50px repeat(5, 1fr); /* Još manje širine za labelu sata */
+    }
+    .cell {
+        padding: 0.6rem 0.2rem;
+        font-size: 0.75em;
+    }
+    .hour-label {
+        font-size: 0.8em;
+    }
+    .day-header {
+        font-size: 0.8em;
+    }
+    .subject-cell {
+        min-height: 50px;
+    }
+    .subject-cell .cas {
+        font-size: 0.8em;
+    }
+    .subject-cell.dodaj-cas a {
+        font-size: 1.8em;
+    }
+
+    .raspored-container .smjena-container { /* Specifično za .raspored-container .smjena-container */
+        font-size: 1em;
+        padding: 0.5rem 0.6rem;
+        min-height: 35px;
+    }
 }

@@ -85,6 +85,7 @@ if(isset($_POST['submit']))
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
         <link rel="stylesheet" href="../css/dashboard.css">
         <link rel="stylesheet" href="../css/kartica.css">
+        <script src="../scripts/app.js"></script>
     </head>
     <body>
         <div class="container-fluid">
@@ -93,7 +94,7 @@ if(isset($_POST['submit']))
                 <h5 class="px-3 fs-3 my-3">Dobrodošli, <?php if($qProf->rowCount()>0): echo $profesor['ime_prezime']; endif; ?>!</h5>
                 <a href="dashboard.php"><i class="bi bi-house me-2"></i>Početna</a>
                 <div class="dropdown-container">
-                    <a href="#" class="active"><i class="bi bi-book me-2"></i>Moj razred</a>
+                    <a href="#" class="active dropdown-toggle"><i class="bi bi-book me-2"></i>Moj razred</a>
                     <ul class="dropdown-menu">
                         <li class="has-submenu"><a href="listaucenika.php">Lista učenika</a></li>
                         <li class="has-submenu"><a href="rasporeducenika.php">Raspored časova</a></li>
